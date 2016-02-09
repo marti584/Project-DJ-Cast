@@ -1,0 +1,32 @@
+<template name="newchannel">
+  {{#if currentUser}}
+    <h2 id="newchannel-header">Create a new channel</h2>
+    {{#with channel}}
+    <form id="add-channel" class="form-inline" role="form">
+      <div class="form-group">
+        <input type="text" id="title" class="form-control required" name="title" placeholder="Title" aria-describedby="basic-addon1">
+      </div>
+      <div class="form-group">
+        <input type="text" id="query" class="form-control required" name="query" placeholder="Query" aria-describedby="basic-addon1">
+      </div>
+      <div class="form-group">
+        <input type="submit" id="submit" class="btn btn-success btn-block" value="Submit">
+      </div>
+      {{#if hasValidationError 'title'}}
+        <div id="title-error" class="alert alert-danger">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          {{getValidationError 'title'}}
+        </div>
+      {{/if}}
+      {{#if hasValidationError 'query'}}
+        <div id="query-error" class="alert alert-danger">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          {{getValidationError 'query'}}
+        </div>
+      {{/if}}
+    </form>
+    {{/with}}
+  {{else}}
+    <h2 id="newchannel-header">You must log in first</h2>
+  {{/if}}
+</template>

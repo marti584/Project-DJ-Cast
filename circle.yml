@@ -1,0 +1,44 @@
+dependencies:
+
+  cache_directories:
+    - "~/.meteor"
+    - "~/.npm"
+
+  override:
+
+    # -- CACHE METEOR --
+    # Restore the meteor symlink
+    - if [ -d ~/.meteor ]; then sudo ln -s ~/.meteor/meteor /usr/local/bin/meteor; fi
+    # Install Meteor if the cache didn't restore it
+    - if [ ! -e ~/.meteor/meteor ]; then curl https://install.meteor.com | sh; fi
+
+    # -- CACHE CUCUMBER NPM MODULES --
+    # Install package dependencies for Cucumber support files
+    - npm install --production:
+        pwd: tests/cucumber
+          
+    # -- INSTALL VELOCITY CLI --
+    - npm install -g velocity-cli
+
+test:
+
+  override:
+
+    # -- RUN JASMINE --
+    - velocity test-app --ci:
+        timeout: 1200
+        environment:
+          CUCUMBER: 0
+          JASMINE_BROWSER: PhantomJS
+
+    # -- RUN CUCUMBER --
+    - velocity test-app --ci:
+        timeout: 2400
+        environment:
+          JASMINE_CLIENT_INTEGRATION: 0
+          JASMINE_SERVER_INTEGRATION: 0
+          SELENIUM_BROWSER: phantomjs
+          CUCUMBER_SCREENSHOTS_DIR: "$CIRCLE_ARTIFACTS/screenshots/chrome"
+          CUCUMBER_JSON_OUTPUT: "$CIRCLE_TEST_REPORTS/chrome.cucumber"
+    - mkdir -p $CIRCLE_ARTIFACTS/phantom
+    - cp .meteor/local/log/*.log $CIRCLE_ARTIFACTS/phantom 

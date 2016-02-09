@@ -1,0 +1,21 @@
+<template name="channel">
+  {{#if Template.subscriptionsReady}}
+    {{#with channel}}
+    <div class="panel panel-default pull-left">
+      <div class="panel-heading">
+        <h3 id="channel-title" class="panel-title">{{title}}</h3>
+      </div>
+      <div id="channel-query" class="panel-body">
+        {{query}}
+      </div>
+      {{#each preview}}
+      <div id="channel-preview" class="panel-body pull-left">
+        <img class="preview-image" src="{{this.url}}" width="100" height="100"/>
+      </div>
+      {{/each}}
+    </div>
+    {{/with}}
+  {{else}}
+    <p>Loading...</p>
+  {{/if}}
+</template>

@@ -1,0 +1,47 @@
+# Meteor packages used by this project, one per line.
+# Check this file (and the other files in this directory) into your repository.
+#
+# 'meteor add' and 'meteor remove' will edit this file for you,
+# but you can also edit it by hand.
+
+twbs:bootstrap
+less
+force-ssl
+standard-minifiers
+meteor-base
+mobile-experience
+mongo
+blaze-html-templates
+session
+jquery
+tracker
+logging
+reload
+random
+ejson
+spacebars
+check
+velocity:core@0.10.0-rc.4
+velocity:html-reporter@0.9.0-rc.4
+sanjo:jasmine
+xolvio:cucumber@0.14.0-rc.3
+accounts-base
+accounts-password
+audit-argument-checks
+themeteorchef:bert
+themeteorchef:jquery-validation
+fourseven:scss
+meteorhacks:ssr
+underscore
+meteorhacks:npm
+npm-container
+jagi:astronomy@1.0.0-rc.5
+jagi:astronomy-validators@1.0.0-rc.3
+jagi:astronomy-timestamp-behavior
+ecmascript
+kadira:flow-router
+kadira:blaze-layout
+ian:accounts-ui-bootstrap-3
+fixtures
+browser-policy
+reactive-var

@@ -1,0 +1,21 @@
+{
+  "name":"BetterBackground",
+  "description":"Heroku deployment for review apps.",
+  "scripts":{},
+  "env":{
+    "MONGO_URL":{
+      "required":true
+    },
+    "ROOT_URL":{
+      "required":true
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "https://github.com/AdmitHub/meteor-buildpack-horse.git"
+    }
+  ],
+  "addons":[
+    "mongolab"
+  ]
+}
