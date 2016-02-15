@@ -45,3 +45,5 @@ ian:accounts-ui-bootstrap-3
 fixtures
 browser-policy
 reactive-var
+accounts-facebook
+accounts-google
