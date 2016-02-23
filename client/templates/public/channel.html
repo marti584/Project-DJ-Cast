@@ -1,21 +1,41 @@
 <template name="channel">
+
   {{#if Template.subscriptionsReady}}
     {{#with channel}}
-    <div class="panel panel-default pull-left">
-      <div class="panel-heading">
-        <h3 id="channel-title" class="panel-title">{{title}}</h3>
+    
+    <div class=playerbody>
+      <section>
+        <div class="headleft">
+          <h1 class="roomtitle">{{title}}</h1>
+          <h4 class="roomdesc">{{query}}</h4>
+         </div>
+       <div class="headright">
+          <input type="text" name="search" class="textbox" placeholder="Request Song...">
+        </div>
+      </section>
+
+
+
+
+
+        <div class="player">
+        <img src="http://www.billboard.com/files/styles/gallery_main_well_2/public/media/M-I-A-Kala-album-covers-billboard-1000x1000.jpg" class="playerimg">
+        <div class="playermeta">
+        <h3 class="songname">Paper Planes</h3>
+        <p class="artistalbum">M.I.A., 'Kala' (2007) - M.I.A.</p>
+        </div>
+        </div>
       </div>
-      <div id="channel-query" class="panel-body">
-        {{query}}
-      </div>
-      {{#each preview}}
-      <div id="channel-preview" class="panel-body pull-left">
-        <img class="preview-image" src="{{this.url}}" width="100" height="100"/>
-      </div>
-      {{/each}}
-    </div>
+
+    
     {{/with}}
   {{else}}
-    <p>Loading...</p>
+  
+  <div class="player">
+  <h1 class="roomtitle">Loading</h1>
+  </div>
+  
   {{/if}}
+
 </template>
+
