@@ -21,36 +21,43 @@ Template.channel.helpers({
   channel: function() {
     var channelId = FlowRouter.getParam('id');
     return Channel.findOne(channelId);
-  },
-  preview: function() {
-    return Template.instance().urls.get();
   }
+  // preview: function() {
+  //   return Template.instance().urls.get();
+  // }
 });
 
+Template.searchBox.onCreated(function() {
+  var self = this;
+  self.autorun(function() {
+    self.urls = new ReactiveVar([]);
+  });
+
+});
 
 Template.searchBox.events({
-  "keyup #search-box": _.throttle(function(e) {
+  "keyup #search-box": _.throttle(function(e, template) {
     console.log("SEARCHING");
     var text = $(e.target).val().trim();
-    console.log(text);
     self.urls = new ReactiveVar([]);
-    Meteor.call('/youtube/searchForMusic', text, 1, function(err, res) {
+    Meteor.call('/youtube/searchForMusic', text, 12, function(err, res) {
       if (err) {
         throw err;
       }
-      console.log(JSON.stringify(res,null,2));
-      self.urls.set(res);
+      // console.log(JSON.stringify(res,null,2));
+      template.urls.set(res.items);
     });
-  }, 200)
+  }, 1000)
 });
 
 Template.searchBox.helpers({
 
   getSearchResults: function() {
-    return self.urls;
+    console.log(JSON.stringify(Template.instance().urls.get(),null,2));
+    return Template.instance().urls.get();
   },
 
-  searchForMusic: function(searchText) {
-    
+  checkCharCount: function(title) {
+    return title.length < 40;
   }
 });
