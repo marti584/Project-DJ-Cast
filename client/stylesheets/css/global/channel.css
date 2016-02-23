@@ -1,0 +1,81 @@
+img.playerimg {
+    border-radius: 8px;
+    display: block;
+ 	margin-left: auto;
+  	margin-right: auto;
+  	width: 450px;
+    height: 450px;
+}
+
+body{
+      background-image:url("http://sf.co.ua/13/01/wallpaper-2578624.jpg");
+
+      
+}
+
+div.player {
+    width: 500px;
+    margin: auto;
+}
+
+div.playermeta{
+	padding-left:25px;
+}
+
+div.headleft{
+	width:50%;
+	float:left;
+}
+
+div.headright{
+	float:right;
+	padding-top:20px;
+
+}
+ 
+.textbox { 
+    background: white; 
+    border: 1px double #DDD; 
+    border-radius: 5px; 
+    box-shadow: 0 0 5px #333; 
+    color: #666; 
+    outline: none; 
+    height:25px; 
+    width: 275px; 
+  } 
+
+h3.songname{
+	margin-bottom:5px;
+	margin-top:5px;
+	color: #E4E4E4;
+}
+
+h1.roomtitle{
+	margin-top:0px;
+	color: #E4E4E4;
+}
+
+h4.roomdesc{
+	color: #E4E4E4;
+}
+
+div.container-fluid.sub{
+	height: 100%;
+    width:100%;
+    background: rgba(0,0,0,.5);
+    overflow:hidden;
+    min-height:100%;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+div.playerbody{
+    padding-left: 15px;
+    padding-right:15px;
+    border-radius: 15px;
+    background: rgba(0,0,0,.65);
+}
+
+p.artistalbum{
+	color: #E4E4E4;
+}
