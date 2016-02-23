@@ -1,25 +1,43 @@
-<template name="home">
-  <div id="channels-list" class="list-group">
-    {{#each channels}}
-      <div class="row channel-row list-group-item">
-        <div class="pull-left">
-          <a href="/channels/{{_id}}">
-            <h4 class="list-group-item-heading">{{title}}</h4>
-            <p class="list-group-item-text">{{query}}</p>
-          </a>
-        </div>
-        <div class="pull-right">
-          {{> subscribeButton}}
-        </div>
-      </div>
-    {{/each}}
-  </div>
-</template>
+<template name = "home">
+  <h1>Dj-Cast</h1>
 
-<template name="subscribeButton">
-  <!-- {{#if subscribed}}
-    <button id="unsubscribe" type="submit" class="{{#unless currentUser}}disabled{{/unless}} btn btn-primary">Unsubscribe</button>
-  {{else}}
-    <button id="subscribe" type="submit" class="{{#unless currentUser}}disabled{{/unless}} btn btn-primary">Subscribe</button>
-  {{/if}} -->
+  <button type="button" class="button button1" data-toggle="modal" data-target="#myModal">create a room</button>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Create Room
+
+        </h4>
+      </div>
+      <div class="modal-body">
+        <form>
+        	Room Name: <br>
+        	<input type="text" name="roomname"><br>
+          <!-- {{#unless currentUser}}
+        	Admin Name: <br>
+        	<input type="text" name="adminname"><br>
+          Admin Password: <br>
+          <input type="text" name="password"><br>
+          {{/unless}} -->
+        </form>
+        {{#unless currentUser}}
+          {{> loginButtons}}
+        {{/unless}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn button1" {{addDisabled}} >Create</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <button class="button button2">join a room</button>
+
+  
 </template>
