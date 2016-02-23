@@ -44,10 +44,14 @@ Template.searchBox.events({
       if (err) {
         throw err;
       }
-      // console.log(JSON.stringify(res,null,2));
+      //console.log(JSON.stringify(res,null,2));
       template.urls.set(res.items);
     });
-  }, 1000)
+  }, 1000),
+  "click .list-group-item": function (e, template) {
+    // console.log(e.target);
+    console.log(this);
+  }
 });
 
 Template.searchBox.helpers({
@@ -61,3 +65,4 @@ Template.searchBox.helpers({
     return title.length < 40;
   }
 });
+
