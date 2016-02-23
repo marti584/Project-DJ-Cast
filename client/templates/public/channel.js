@@ -21,8 +21,5 @@ Template.channel.helpers({
   channel: function() {
     var channelId = FlowRouter.getParam('id');
     return Channel.findOne(channelId);
-  },
-  preview: function() {
-    return Template.instance().urls.get();
   }
 });
