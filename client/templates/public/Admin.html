@@ -1,0 +1,22 @@
+
+<template name="Admin">
+	<div class="container">
+		<header>
+			<h1>YouTube Test</h1>
+		</header>
+	</div>
+	<div id="player"></div>
+	{{> myButtons}}
+</template>
+
+<template name="myButtons">
+	<form>
+		<label id="videoInfo"></label>
+		<br>
+		<span style="display: inline;">
+			<input id="playPauseButton" type="button" value="Pause"/>
+			<input id="skipButton" type="button" value="Skip"/>
+		</span>
+	</form>
+</template>
+
