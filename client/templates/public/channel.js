@@ -37,20 +37,27 @@ Template.searchBox.onCreated(function() {
 
 Template.searchBox.events({
   "keyup #search-box": _.throttle(function(e, template) {
-    console.log("SEARCHING");
     var text = $(e.target).val().trim();
     self.urls = new ReactiveVar([]);
     Meteor.call('/youtube/searchForMusic', text, 12, function(err, res) {
       if (err) {
         throw err;
       }
-      //console.log(JSON.stringify(res,null,2));
       template.urls.set(res.items);
     });
   }, 1000),
   "click .list-group-item": function (e, template) {
-    // console.log(e.target);
-    console.log(this);
+    var song = new Song();
+    song.set("title",this.snippet.title);
+    song.set("videoID", this.id.videoId);
+    song.set("thumbnail", this.snippet.thumbnails.high.url);
+    song.set("source", this.id.kind); 
+    song.set("channelID", FlowRouter.getParam('id'));
+
+    Meteor.call('/youtube/new', song, function(err, res) { 
+
+    } );
+
   }
 });
 

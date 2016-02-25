@@ -3,7 +3,6 @@ Meteor.methods({
 	'/youtube/searchForMusic': function(title, maxDepth, callback) {
 			check(title, String);
 			check(maxDepth, Number);
-			//check(callback, Function);
 			return Modules.server.youtubeSearchSync(title, maxDepth, callback);
 
 		// Modules.server.youtubeSearchSync(title, 1, function(error, result) {
