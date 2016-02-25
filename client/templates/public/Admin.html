@@ -2,10 +2,18 @@
 <template name="Admin">
 	<div class="container">
 		<header>
-			<h1>YouTube Test</h1>
+			<h1>Admin Page</h1>
 		</header>
 	</div>
 	<div id="player"></div>
+	<br>
+	<label id="title" ></label>
+	<br>
+	<span style="display: inline;">
+		<label id="elapsed"></label>
+		<label >/</label>
+		<label id="duration"></label>
+	</span>
 	<br>
 	<span style="display: inline;">
 		<input id="playPauseButton" type="button" value="Pause" OnClick="playPauseClick()"/>
@@ -26,11 +34,11 @@
 		var player;
 		function onYouTubeIframeAPIReady() {
 			player = new YT.Player('player', {
-				height: '390',
-				width: '640',
+				height: '400',
+				width: '600',
 				videoId: '0CFuCYNx-1g',
 				playerVars: {
-					'autoplay': 0,
+					'autoplay': 1,
 					'controls': 0,
 					'disablekb': 1,
 					'enablejsapi': 1,
@@ -44,14 +52,17 @@
 		}
 
 		function onPlayerReady(event) {
+			document.getElementById("title").innerText = player.getVideoData().title;
+			document.getElementById("duration").innerText = player.getDuration;
 			event.target.playVideo();
 		}
 
-		var done = false;
 		function onPlayerStateChange(event) {
-			if (event.data == YT.PlayerState.PLAYING && !done) {
-				setTimeout(stopVideo, 6000);
-				done = true;
+			if (event.data == YT.PlayerState.ENDED) {
+				player.loadVideoById(queue.shift(), 0, "default");
+				player.playVideo();	
+				document.getElementById("title").innerText = player.getVideoData().title;
+				document.getElementById("duration").innerText = player.getDuration();
 			}
 		}
 
@@ -71,6 +82,8 @@
 		function skipClick(){
 			player.loadVideoById(queue.shift(), 0, "default");
 			player.playVideo();
+			document.getElementById("title").innerText = player.getVideoData().title;
+			document.getElementById("duration").innerText = player.getDuration();
 		}
 
 
