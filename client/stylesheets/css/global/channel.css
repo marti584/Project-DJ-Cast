@@ -1,6 +1,6 @@
 img.playerimg {
     border-radius: 8px;
-    display: block;
+    display: inline-block;
  	margin-left: auto;
   	margin-right: auto;
   	width: 450px;
@@ -8,18 +8,18 @@ img.playerimg {
 }
 
 body{
-      background-image:url("http://sf.co.ua/13/01/wallpaper-2578624.jpg");
+      background-image:url("http://www.photoblog.ie/wp-content/uploads/2014/05/album-covers-collage.jpg");
 
       
 }
 
 div.player {
-    width: 500px;
-    margin: auto;
+    width: 600px;
+    margin: auto 0;
 }
 
 div.playermeta{
-	padding-left:25px;
+	padding-left:70px;
 }
 
 div.headleft{
@@ -31,6 +31,14 @@ div.headright{
 	float:right;
 	padding-top:20px;
 
+}
+
+element{
+    position: static;
+    visibility: visible;
+    width: 61px;
+    height: 20px;
+    float:right;
 }
  
 .textbox { 
@@ -78,4 +86,21 @@ div.playerbody{
 
 p.artistalbum{
 	color: #E4E4E4;
+}
+
+
+img.control{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50px;
+    height: 50px;
+    display:inline-block;
+}
+
+.btn-info {
+  color: #fff;
+  background-color: #000;
+  border-color: #fff;
+  font-size: 30px;
 }
