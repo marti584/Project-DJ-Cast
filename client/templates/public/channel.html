@@ -1,12 +1,22 @@
 <template name="channel">
   {{#if Template.subscriptionsReady}}
     {{#with channel}}
-    <div class="panel panel-default pull-left">
+    <div class="panel panel-default">
       <div class="panel-heading">
         <h3 id="channel-title" class="panel-title">{{title}}</h3>
       </div>
       <div id="channel-query" class="panel-body">
-        {{query}}
+        <!-- <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+          Link with href
+        </a> -->
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+          Search For Song
+        </button>
+        <div class="collapse" id="collapseExample">
+          <div class="well">
+            {{> searchBox}}
+          </div>
+        </div>
       </div>
     </div>
     {{/with}}
@@ -14,3 +24,22 @@
     <p>Loading...</p>
   {{/if}}
 </template>
+
+<template name="searchBox">
+  <input type="text" id="search-box" placeholder="search youtube here">
+  <div class="list-group">
+  {{#each getSearchResults}}
+      <a href="#" class="list-group-item">
+      <div class="row">
+        <div class="col-md-1">
+          <img src="{{snippet.thumbnails.default.url}}" class="img-responsive"/>
+        </div>
+        <div class="col-md-11">
+          <h4 class="list-group-item-heading">{{snippet.title}}</h4>
+        </div>
+      </div>
+      </a>
+  {{/each}}
+  </div>
+</template>
+
