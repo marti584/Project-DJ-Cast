@@ -6,10 +6,79 @@
 		</header>
 	</div>
 	<div id="player"></div>
-	{{> myButtons}}
+	<br>
+	<span style="display: inline;">
+		<input id="playPauseButton" type="button" value="Pause" OnClick="playPauseClick()"/>
+		<input id="skipButton" type="button" value="Skip" OnClick="skipClick()"/>
+	</span>
+
+	<script>
+		var queue = [];
+		queue.push('uxpDa-c-4Mc');
+		queue.push('YQHsXMglC9A');
+		queue.push('QcIy9NiNbmo');
+		var tag = document.createElement('script');
+	
+		tag.src = "https://www.youtube.com/iframe_api";
+		var firstScriptTag = document.getElementsByTagName('script')[0];
+		firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+	
+		var player;
+		function onYouTubeIframeAPIReady() {
+			player = new YT.Player('player', {
+				height: '390',
+				width: '640',
+				videoId: '0CFuCYNx-1g',
+				playerVars: {
+					'autoplay': 0,
+					'controls': 0,
+					'disablekb': 1,
+					'enablejsapi': 1,
+					'rel': 0
+				},
+				events: {
+					'onReady': onPlayerReady,
+					'onStateChange': onPlayerStateChange
+				}
+			});
+		}
+
+		function onPlayerReady(event) {
+			event.target.playVideo();
+		}
+
+		var done = false;
+		function onPlayerStateChange(event) {
+	//		if (event.data == YT.PlayerState.PLAYING && !done) {
+		//		setTimeout(stopVideo, 6000);
+		//		done = true;
+			//}
+		}
+
+		function playPauseClick(){
+			var button = document.getElementById("playPauseButton");
+				if(button.value == "Pause"){
+					button.value = "Play";
+					player.pauseVideo();
+				}
+				else{
+				button.value = "Pause";
+				player.playVideo()
+			}
+
+		}
+
+		function skipClick(){
+			player.loadVideoById(queue.shift(), 0, "default");
+			player.playVideo();
+		}
+
+
+	</script>
+	<!--{{> myButtons}}-->
 </template>
 
-<template name="myButtons">
+<!--<template name="myButtons">
 	<form>
 		<label id="videoInfo"></label>
 		<br>
@@ -19,4 +88,5 @@
 		</span>
 	</form>
 </template>
+-->
 
