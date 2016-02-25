@@ -7,14 +7,14 @@
 	</div>
 	<div id="player"></div>
 	<br>
-	<label id="title" ></label>
+	<!--<label id="title" ></label>
 	<br>
 	<span style="display: inline;">
 		<label id="elapsed"></label>
 		<label >/</label>
 		<label id="duration"></label>
 	</span>
-	<br>
+	<br>-->
 	<span style="display: inline;">
 		<input id="playPauseButton" type="button" value="Pause" OnClick="playPauseClick()"/>
 		<input id="skipButton" type="button" value="Skip" OnClick="skipClick()"/>
@@ -52,8 +52,8 @@
 		}
 
 		function onPlayerReady(event) {
-			document.getElementById("title").innerText = player.getVideoData().title;
-			document.getElementById("duration").innerText = player.getDuration;
+			//document.getElementById("title").innerText = player.getVideoData().title;
+			//document.getElementById("duration").innerText = player.getDuration;
 			event.target.playVideo();
 		}
 
@@ -61,8 +61,8 @@
 			if (event.data == YT.PlayerState.ENDED) {
 				player.loadVideoById(queue.shift(), 0, "default");
 				player.playVideo();	
-				document.getElementById("title").innerText = player.getVideoData().title;
-				document.getElementById("duration").innerText = player.getDuration();
+				//document.getElementById("title").innerText = player.getVideoData().title;
+				//document.getElementById("duration").innerText = player.getDuration();
 			}
 		}
 
@@ -82,8 +82,8 @@
 		function skipClick(){
 			player.loadVideoById(queue.shift(), 0, "default");
 			player.playVideo();
-			document.getElementById("title").innerText = player.getVideoData().title;
-			document.getElementById("duration").innerText = player.getDuration();
+			//document.getElementById("title").innerText = player.getVideoData().title;
+			//document.getElementById("duration").innerText = player.getDuration();
 		}
 
 
