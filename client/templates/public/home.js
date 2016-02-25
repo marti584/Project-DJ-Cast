@@ -14,3 +14,9 @@ Template.home.helpers({
     console.log("User");
   }
 });
+
+Template.home.events({
+    'click .button2': function(){
+        
+    }
+});
