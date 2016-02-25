@@ -50,14 +50,6 @@ Template.searchBox.events({
   }
 });
 
-
-Template.channel.helpers({
-  channel: function() {
-    var channelId = FlowRouter.getParam('id');
-    return Channel.findOne(channelId);
-  }
-});
-
 Template.searchBox.helpers({
   getSearchResults: function() {
     console.log(JSON.stringify(Template.instance().urls.get(),null,2));
