@@ -109,9 +109,14 @@
 
     function onPlayerStateChange(event) {
       if (event.data == YT.PlayerState.ENDED) {
-        
-        player.loadVideoById("{{nextSong.videoID}}", 0, "default");
-        player.playVideo(); 
+        var channelId = FlowRouter.getParam('id');
+        Meteor.call('/song/remove', Song.getLatest(channelId).fetch()[0], function(err, res) { 
+          if (err) {}
+            if (Song.getLatest(channelId).fetch()[0]) {
+              player.loadVideoById(Song.getLatest(channelId).fetch()[0].videoID, 0, "default");
+              player.playVideo();
+            }
+        });
         //document.getElementById("title").innerText = player.getVideoData().title;
         //document.getElementById("duration").innerText = player.getDuration();
       }
@@ -130,13 +135,7 @@
 
     }
 
-    function skipClick(){
-
-      player.loadVideoById("{{nextSong.videoID}}", 0, "default");
-      player.playVideo();
-      //document.getElementById("title").innerText = player.getVideoData().title;
-      //document.getElementById("duration").innerText = player.getDuration();
-    }
+    
 
 
   </script>

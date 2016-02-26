@@ -82,7 +82,7 @@ Template.Moderator.helpers({
   },
   nextSong: function() {
     var channelId = FlowRouter.getParam('id');
-    return Song.getChannelList(channelId).fetch()[1];
+    return Song.getChannelList(channelId).fetch()[1].videoID;
   }
 });
 
@@ -100,18 +100,5 @@ Template.Moderator.events({
       } );
     }
   },
-  onPlayerStateChange: function(event, template) {
-      if (event.data == YT.PlayerState.ENDED) {
-        
-        var channelId = FlowRouter.getParam('id');
-        Meteor.call('/song/remove', Song.getLatest(channelId).fetch()[0], function(err, res) { 
-          if (err) {}
-            if (Song.getLatest(channelId).fetch()[0]) {
-              player.loadVideoById(Song.getLatest(channelId).fetch()[0].videoID, 0, "default");
-              player.playVideo();
-            }
-        } );
-      }
-    }
 });
 
