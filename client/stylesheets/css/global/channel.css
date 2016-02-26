@@ -16,10 +16,13 @@ body{
 div.player {
     width: 600px;
     margin: auto 0;
+    margin-left:35%;
+    text-align:center;
+
 }
 
 div.playermeta{
-	padding-left:70px;
+	padding-left:5px;
 }
 
 div.headleft{
@@ -30,7 +33,12 @@ div.headleft{
 div.headright{
 	float:right;
 	padding-top:20px;
+    width:450px;
 
+}
+
+btn-o{
+    float:right;
 }
 
 element{
@@ -41,7 +49,7 @@ element{
     float:right;
 }
  
-.textbox { 
+input { 
     background: white; 
     border: 1px double #DDD; 
     border-radius: 5px; 
@@ -50,31 +58,39 @@ element{
     outline: none; 
     height:25px; 
     width: 275px; 
+    float:right;
   } 
 
 h3.songname{
-	margin-bottom:5px;
+	padding-bottom:5px;
 	margin-top:5px;
 	color: #E4E4E4;
+    text-align: left;
+    padding-left:75px;
 }
 
 h1.roomtitle{
 	margin-top:0px;
 	color: #E4E4E4;
+    text-align: left;
+    font-size: 45px;
+    text-transform: none;
+    letter-spacing: 0;
 }
 
 h4.roomdesc{
 	color: #E4E4E4;
+    background-color: rgba(0,0,0,0);
+    text-align: left;
 }
 
-div.container-fluid.sub{
+div.container-fluid{
 	height: 100%;
     width:100%;
-    background: rgba(0,0,0,.5);
     overflow:hidden;
     min-height:100%;
-    padding-left: 0px;
-    padding-right: 0px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 div.playerbody{
@@ -103,4 +119,37 @@ img.control{
   background-color: #000;
   border-color: #fff;
   font-size: 30px;
+}
+
+.list-group{
+    padding-top: 25px;
+    padding-left: 50px;
+}
+
+.list-group-item{
+    width: 400px;
+    background-color: rgba(0,0,0,.8);
+
+}
+
+.list-group-item:hover{
+    width: 400px;
+    background-color: rgba(0,0,0,.8);
+
+}
+
+.list-group-item-heading{
+    font-size: 16px;
+    margin-top: 0px;
+    margin-bottom: 5px;
+    background-color: rgba(0,0,0,0);
+}
+
+.col-md-1{
+    padding-left: 5px;
+    width:130px;
+}
+
+.twitter-share-button{
+    float:right;
 }
