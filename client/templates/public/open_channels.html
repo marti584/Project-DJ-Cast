@@ -2,33 +2,17 @@
 
 <div>
   <ul class="openchannellist">
+    
+    {{#each channels}}
     <li class="openchannel"> 
       <div class="center">
-        <h7 class="channeltitle">Mirankjdkdda's Room</h7>
+        <h7 class="channeltitle">{{title}}</h7>
         <br>
-        <h8 class="channeldesc">The best room ever.</h8>
+        <h8 class="channeldesc">{{query}}</h8>
       </div>
     </li>
-    <li class="openchannel">
-      <div>
-        <h7 class="channeltitle">Katie's Room</h7>
-        <br>
-        <h8 class="channeldesc">Not as good as Miranda's.</h8>
-      </div>
-    </li>
-    <li class="openchannel">
-      <div>
-        <h7 class="channeltitle">Danny's Room</h7>
-        <br>
-        <h8 class="channeldesc">Hey.</h8>
-      </div>
-    </li>
-    <li class="openchannel">4</li>
-    <li class="openchannel">5</li>
-    <li class="openchannel">6</li>
-    <li class="openchannel">7</li>
-    <li class="openchannel">8</li>
-    <li class="openchannel">9</li>
+    {{/each}}
+    
   </ul>
 </div>
 
