@@ -12,7 +12,8 @@ Template.openchannels.helpers({
 });
 
 Template.openchannels.events({
-    'click': function(){
-        Meteor.Router.to("/openchannels");
+    'click': function(err, res){
+    	console.log(this);
+        FlowRouter.go(`/channels/${this._id}`);
     }
 });
