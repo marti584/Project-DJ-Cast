@@ -16,7 +16,11 @@ Template.home.helpers({
 });
 
 Template.home.events({
-    'click .button2': function(){
-        
-    }
+  "click button": function (e, template) {
+    if (e.target.id == "joinRoom") {
+      console.log("Join room button");
+      FlowRouter.route('/openchannels');
+
+    } 
+  }
 });
