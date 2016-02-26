@@ -1,16 +1,14 @@
 Meteor.methods({ 
   /*
-   * Reads a Channel and searches for its images
+   * Reads a keyword and searches on youtube for matching keywords
    *
-   * @param {channelId} the Channel object to read
-   * @param {start_page} the starting page number
-   * @param {num_pages} the number of pages to grab images
-   * @return {Images} an array of image objects
+   * @param {keyword} the youtube string to search
+   * @return {json} a JSON of results
    */
-  '/channels/getUrls': function(channelId) {
+  '/youtube/getSearchResults': function(keyword) {
     // Check Arguments
-    check(channelId, String);
+    check(keyword, String);
  
-    return Modules.server.googleImageSearchSync(Channel.findOne(channelId).get('query'));
+    return Modules.server.youtubeSearchSync(Channel.findOne(keyword).get('query'));
   }
 });

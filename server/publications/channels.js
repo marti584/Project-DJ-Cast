@@ -23,3 +23,4 @@ Meteor.publish('myChannels', function() {
   let user = User.findOne(this.userId);
   return user.getSubscriptions();
 });
+
