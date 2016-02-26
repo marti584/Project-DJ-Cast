@@ -1,29 +1,37 @@
 <template name="channel">
-  {{#if Template.subscriptionsReady}}
     {{#with channel}}
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 id="channel-title" class="panel-title">{{title}}</h3>
-      </div>
-      <div id="channel-query" class="panel-body">
-        <!-- <a class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-          Link with href
-        </a> -->
-        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-          Search For Song
-        </button>
-        <div class="collapse" id="collapseExample">
-          <div class="well">
-            {{> searchBox}}
-          </div>
+    <div class=playerbody>
+      <section>
+        <div class="headleft">
+          <h1 class="roomtitle">{{title}}</h1>
+          <h4 class="roomdesc">{{query}}</h4>
+         </div>
+       <div class="headright" style="float:right;">
+          <input type="text" name="search" class="textbox" placeholder="Request Song..."><p></p>
+                    <a href="https://twitter.com/share" class="twitter-share-button" data-text="Listening to {{title}} on DJ-Cast" data-via="djcast_">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+        </div>
+      </section>
+
+        <div class="player">
+
+        <a href="#" class="btn btn-info btn-lg">
+          <span class="glyphicon glyphicon-backward"></span>
+        </a>
+        <img src="http://www.billboard.com/files/styles/gallery_main_well_2/public/media/M-I-A-Kala-album-covers-billboard-1000x1000.jpg" class="playerimg">
+        <a href="#" class="btn btn-info btn-lg">
+          <span class="glyphicon glyphicon-forward "></span>
+        </a>
+
+        <div class="playermeta">
+        <h3 class="songname">Paper Planes</h3>
+        <p class="artistalbum">M.I.A., 'Kala' (2007) - M.I.A.</p>
+        </div>
         </div>
       </div>
-    </div>
-    {{/with}}
-  {{else}}
-    <p>Loading...</p>
-  {{/if}}
+	{{/with}}
 </template>
+
 
 <template name="searchBox">
   <input type="text" id="search-box" placeholder="search youtube here">
@@ -42,4 +50,3 @@
   {{/each}}
   </div>
 </template>
-
