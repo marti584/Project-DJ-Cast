@@ -62,7 +62,7 @@ Song.getLatest = function(limit, channelID) {
     limit = 100;
   }
 
-  return song.find({}, {
+  return Song.find({}, {
     channelID: channelID,
     sort: {createdAt: 1}, 
     limit: limit
@@ -70,7 +70,7 @@ Song.getLatest = function(limit, channelID) {
 }
 
 Song.getChannelList = function(channelID) {
-  return song.find({}, {
+  return Song.find({
     channelID: channelID
   });
 }

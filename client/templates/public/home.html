@@ -1,7 +1,7 @@
 <template name = "home">
   <h1>Dj-Cast</h1>
 
-  <button type="button" class="button button1" data-toggle="modal" data-target="#myModal">create a room</button>
+  <button type="button" id="largeCreate" class="button button1" data-toggle="modal" data-target="#myModal">create a room</button>
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
@@ -13,24 +13,27 @@
 
         </h4>
       </div>
-      <div class="modal-body">
+      <div class="modal-body" id="modal">
         <form>
         	Room Name: <br>
-        	<input type="text" name="roomname"><br>
+          <input id="title" type="text" name="roomname"><br>
+          Description: <br>
+          <input id="query" type="text" name="roomdesc"><br>
           <!-- {{#unless currentUser}}
         	Admin Name: <br>
         	<input type="text" name="adminname"><br>
           Admin Password: <br>
           <input type="text" name="password"><br>
           {{/unless}} -->
+        
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" id="submit" class="btn button1" dismiss="modal" {{addDisabled}} >Create</button>
         </form>
         {{#unless currentUser}}
           {{> loginButtons}}
         {{/unless}}
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" class="btn button1" {{addDisabled}} >Create</button>
       </div>
     </div>
   </div>

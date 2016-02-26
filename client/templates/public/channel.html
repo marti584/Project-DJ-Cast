@@ -7,12 +7,12 @@
           <h4 class="roomdesc">{{query}}</h4>
          </div>
        <div class="headright" style="float:right;">
-          <input type="text" name="search" class="textbox" placeholder="Request Song..."><p></p>
+          <!-- <input type="text" name="search" class="textbox" placeholder="Request Song..."> -->{{> searchBox}}<p></p>
                     <a href="https://twitter.com/share" class="twitter-share-button" data-text="Listening to {{title}} on DJ-Cast" data-via="djcast_">Tweet</a>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
         </div>
       </section>
-
+      {{#with currentSong}}
         <div class="player">
 
         <a href="#" class="btn btn-info btn-lg">
@@ -24,10 +24,10 @@
         </a>
 
         <div class="playermeta">
-        <h3 class="songname">Paper Planes</h3>
-        <p class="artistalbum">M.I.A., 'Kala' (2007) - M.I.A.</p>
+        <h3 class="songname">{{title}}</h3>
         </div>
         </div>
+      {{/with}}
       </div>
 	{{/with}}
 </template>

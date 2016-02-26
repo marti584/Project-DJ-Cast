@@ -13,6 +13,10 @@ Template.channel.helpers({
   channel: function() {
     var channelId = FlowRouter.getParam('id');
     return Channel.findOne(channelId);
+  },
+  currentSong: function() {
+    var channelId = FlowRouter.getParam('id');
+    return Song.getLatest(1, channelId).fetch();
   }
 });
 
@@ -52,7 +56,6 @@ Template.searchBox.events({
 
 Template.searchBox.helpers({
   getSearchResults: function() {
-    console.log(JSON.stringify(Template.instance().urls.get(),null,2));
     return Template.instance().urls.get();
   },
 
