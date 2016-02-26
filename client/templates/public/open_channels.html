@@ -1,0 +1,19 @@
+<template name="openchannels">
+
+<div>
+  <ul class="openchannellist">
+    
+    {{#each channels}}
+    <li class="openchannel"> 
+      <div class="center">
+        <h7 class="channeltitle">{{title}}</h7>
+        <br>
+        <h8 class="channeldesc">{{query}}</h8>
+      </div>
+    </li>
+    {{/each}}
+    
+  </ul>
+</div>
+
+</template>

@@ -42,9 +42,11 @@ Template.home.events({
     if (e.target.id == "largeCreate") {
       console.log("Large came");
       template.data.channel = new Channel();
-    } else if (e.target.id == "smallCreate") {
+    } else if (e.target.id == "joinRoom") {
+      console.log("Join room button");
+      FlowRouter.go('/channels');
 
-    }
+    } 
   }
 
 });
