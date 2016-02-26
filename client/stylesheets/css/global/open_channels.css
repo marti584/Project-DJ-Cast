@@ -1,11 +1,25 @@
-h3.channeltitle {
-	margin-top:5px;
-	color: #E4E4E4;
+h7.channeltitle {
+
+	text-align: center;
+    text-transform: lowercase;
+    color: white;
+    font-size: 20px;
+    letter-spacing: 2px;
+    -webkit-text-stroke: 1px black;
+    
 }
 
-h4.channeldesc {
-	color: #E4E4E4;
+h8.channeldesc {
+    text-align: center;
+    text-transform: lowercase;
+    color: white;
+    font-size: 10px;
+    letter-spacing: 1px;
+    -webkit-text-stroke: 1px black;
 }
+
+
+
 
 .openchannellist {
     max-width: 100%;
@@ -26,7 +40,7 @@ h4.channeldesc {
 }
 
 .openchannel:hover {
-    background: #9CC;
+    background: #bec1c1;
     z-index: 100;
     transform: scale(1.2,1.2);
     box-shadow: 0 5px 10px 0 rgba(0,0,0,.2);
