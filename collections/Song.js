@@ -53,19 +53,13 @@ Song = Astronomy.createClass({
  * @param {number} limit The number of channels to fetch, capped at 100
  * @return {Mongo.Cursor} the resulting Mongo cursor from find()
  */
-Song.getLatest = function(limit, channelID) {
-  // Default to 20
-  limit = limit || 20;
+Song.getLatest = function(channelID) {
 
-  // Cap the limit parameter
-  if(limit > 100) {
-    limit = 100;
-  }
-
-  return Song.find({}, {
-    channelID: channelID,
+  return Song.find({
+    channelID: channelID
+  }, {
     sort: {createdAt: 1}, 
-    limit: limit
+    limit: 1
   });
 }
 

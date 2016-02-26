@@ -15,20 +15,26 @@
       {{#with currentSong}}
         <div class="player">
 
+        
+        <!-- <img src="http://www.billboard.com/files/styles/gallery_main_well_2/public/media/M-I-A-Kala-album-covers-billboard-1000x1000.jpg" class="playerimg"> -->
+        {{#if isModerator}}
         <a href="#" class="btn btn-info btn-lg">
           <span class="glyphicon glyphicon-backward"></span>
         </a>
-        <img src="http://www.billboard.com/files/styles/gallery_main_well_2/public/media/M-I-A-Kala-album-covers-billboard-1000x1000.jpg" class="playerimg">
+        {{> Moderator videoId=videoID }}
         <a href="#" class="btn btn-info btn-lg">
           <span class="glyphicon glyphicon-forward "></span>
         </a>
+        {{else}}
+        <img src="{{thumbnail}}" class="playerimg">
+        {{/if}}
 
         <div class="playermeta">
         <h3 class="songname">{{title}}</h3>
         </div>
         </div>
       {{/with}}
-      </div>
+    </div>
 	{{/with}}
 </template>
 
@@ -50,3 +56,91 @@
   {{/each}}
   </div>
 </template>
+
+
+<template name="Moderator">
+  <div id="player"></div>
+  <br>
+  <!--<label id="title" ></label>
+  <br>
+  <span style="display: inline;">
+    <label id="elapsed"></label>
+    <label >/</label>
+    <label id="duration"></label>
+  </span>
+  <br>-->
+  <span style="display: inline;">
+    <input id="playPauseButton" type="button" value="Pause" OnClick="playPauseClick()"/>
+    <input id="skipButton" type="button" value="Skip" OnClick="skipClick()"/>
+  </span>
+
+  <script>
+    var tag = document.createElement('script');
+  
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+  
+    var player;
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('player', {
+        height: '400',
+        width: '600',
+        videoId: '{{videoId}}',
+        playerVars: {
+          'autoplay': 1,
+          'controls': 0,
+          'disablekb': 1,
+          'enablejsapi': 1,
+          'rel': 0
+        },
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange
+        }
+      });
+    }
+
+    function onPlayerReady(event) {
+      //document.getElementById("title").innerText = player.getVideoData().title;
+      //document.getElementById("duration").innerText = player.getDuration;
+      event.target.playVideo();
+    }
+
+    function onPlayerStateChange(event) {
+      if (event.data == YT.PlayerState.ENDED) {
+        
+        player.loadVideoById("{{nextSong.videoID}}", 0, "default");
+        player.playVideo(); 
+        //document.getElementById("title").innerText = player.getVideoData().title;
+        //document.getElementById("duration").innerText = player.getDuration();
+      }
+    }
+
+    function playPauseClick(){
+      var button = document.getElementById("playPauseButton");
+        if(button.value == "Pause"){
+          button.value = "Play";
+          player.pauseVideo();
+        }
+        else{
+        button.value = "Pause";
+        player.playVideo()
+      }
+
+    }
+
+    function skipClick(){
+
+      player.loadVideoById("{{nextSong.videoID}}", 0, "default");
+      player.playVideo();
+      //document.getElementById("title").innerText = player.getVideoData().title;
+      //document.getElementById("duration").innerText = player.getDuration();
+    }
+
+
+  </script>
+  <!--{{> myButtons}}-->
+</template>
+
+
