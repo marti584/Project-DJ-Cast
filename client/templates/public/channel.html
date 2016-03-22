@@ -38,7 +38,6 @@
 	{{/with}}
 </template>
 
-
 <template name="searchBox">
   <input type="text" id="search-box" placeholder="search youtube here">
   <div class="list-group">
@@ -56,7 +55,6 @@
   {{/each}}
   </div>
 </template>
-
 
 <template name="Moderator">
   <div id="player"></div>
@@ -135,10 +133,24 @@
 
     }
 
-    
-
-
   </script>
+
+<script src="https://connect.soundcloud.com/sdk/sdk-3.0.0.js"></script>
+<script>
+SC.initialize({
+  client_id: 'ee340a5bed9ea7336003102356efeaa9'
+});
+
+// find all sounds of buskers licensed under 'creative commons share alike'
+SC.get('/tracks', {
+  q: 'buskers', license: 'cc-by-sa'
+}).then(function(tracks) {
+  console.log(tracks);
+});
+</script>
+
+
+
   <!--{{> myButtons}}-->
 </template>
 
