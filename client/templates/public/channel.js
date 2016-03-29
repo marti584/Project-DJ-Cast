@@ -6,6 +6,7 @@ Template.channel.onCreated(function() {
     self.subscribe('oneChannel', channelId);
     self.subscribe('songList', channelId);
     self.subscribe('latestSong', channelId);
+    self.subscribe('history', channelId);
   });
 
 });
@@ -18,6 +19,11 @@ Template.channel.helpers({
   currentSong: function() {
     var channelId = FlowRouter.getParam('id');
     return Song.getLatest(channelId).fetch()[0];
+  },
+  history: function() {
+    console.log("candy");
+    var channelId = FlowRouter.getParam('id');
+    return History.getLatest(channelId).fetch()[0];
   },
   isModerator: function() {
     var channelId = FlowRouter.getParam('id');
@@ -91,6 +97,17 @@ Template.Moderator.events({
     if (e.target.id == "skipButton") {
       console.log("Removes")
       var channelId = FlowRouter.getParam('id');
+      var song = Song.getLatest(channelId).fetch()[0];
+      
+      var hist = new History();
+      hist.set("title", song.title);
+      hist.set("videoID", song.videoID);
+      hist.set("thumbnail", song.thumbnail);
+      hist.set("source", song.source); 
+      hist.set("channelID", song.channelID);
+      
+      
+      Meteor.call('/history/new', hist, function(err, res){});
       Meteor.call('/song/remove', Song.getLatest(channelId).fetch()[0], function(err, res) { 
         if (err) {}
           if (Song.getLatest(channelId).fetch()[0]) {

@@ -29,6 +29,11 @@
         <img src="{{thumbnail}}" class="playerimg">
         {{/if}}
 
+        <!--{{#with history}}
+
+          <img src="{{thumbnail}}" class="playerimg">
+        {{/with}}-->
+
         <div class="playermeta">
         <h3 class="songname">{{title}}</h3>
         </div>
@@ -40,7 +45,7 @@
 
 
 <template name="searchBox">
-  <input type="text" id="search-box" placeholder="search youtube here">
+  <input type="text" class="search" id="search-box" placeholder="search youtube here">
   <div class="list-group">
   {{#each getSearchResults}}
       <a href="#" class="list-group-item">
@@ -70,8 +75,8 @@
   </span>
   <br>-->
   <span style="display: inline;">
-    <input id="playPauseButton" type="button" value="Pause" OnClick="playPauseClick()"/>
-    <input id="skipButton" type="button" value="Skip" OnClick="skipClick()"/>
+    <input id="playPauseButton" class="playskip" type="button" value="Pause" OnClick="playPauseClick()"/>
+    <input id="skipButton" class="playskip" type="button" value="Skip" OnClick="skipClick()"/>
   </span>
 
   <script>
