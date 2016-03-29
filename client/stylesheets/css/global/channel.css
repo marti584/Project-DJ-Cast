@@ -15,8 +15,7 @@ body{
 
 div.player {
     width: 600px;
-    margin: auto 0;
-    margin-left:35%;
+    margin: 0 auto;
     text-align:center;
 
 }
@@ -66,7 +65,6 @@ h3.songname{
 	margin-top:5px;
 	color: #E4E4E4;
     text-align: left;
-    padding-left:75px;
 }
 
 h1.roomtitle{
@@ -84,7 +82,7 @@ h4.roomdesc{
     text-align: left;
 }
 
-div.container-fluid{
+div.container-fluid.sub{
 	height: 100%;
     width:100%;
     overflow:hidden;
@@ -124,6 +122,7 @@ img.control{
 .list-group{
     padding-top: 25px;
     padding-left: 50px;
+    position: absolute;
 }
 
 .list-group-item{
