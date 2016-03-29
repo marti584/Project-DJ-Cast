@@ -84,7 +84,7 @@ h4.roomdesc{
     text-align: left;
 }
 
-div.container-fluid{
+div.container-fluid.sub{
 	height: 100%;
     width:100%;
     overflow:hidden;
@@ -124,6 +124,7 @@ img.control{
 .list-group{
     padding-top: 25px;
     padding-left: 50px;
+    position: absolute;
 }
 
 .list-group-item{
