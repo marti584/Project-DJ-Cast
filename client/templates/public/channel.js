@@ -21,7 +21,6 @@ Template.channel.helpers({
     return Song.getLatest(channelId).fetch()[0];
   },
   history: function() {
-    console.log("candy");
     var channelId = FlowRouter.getParam('id');
     return History.getLatest(channelId).fetch()[0];
   },
