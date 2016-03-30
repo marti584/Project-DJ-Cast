@@ -36,6 +36,12 @@ div.headright{
 
 }
 
+div.showQr {
+    background-color: white;
+    width: 256px;
+    height: 256px;
+}
+
 btn-o{
     float:right;
 }

@@ -74,6 +74,7 @@ Template.searchBox.helpers({
   }
 });
 
+
 Template.Moderator.onCreated(function() {
   var channelId = FlowRouter.getParam('id');
   this.subscribe('latestSong', channelId);
@@ -94,7 +95,6 @@ Template.Moderator.helpers({
 Template.Moderator.events({
   "click input": function (e, template) {
     if (e.target.id == "skipButton") {
-      console.log("Removes")
       var channelId = FlowRouter.getParam('id');
       var song = Song.getLatest(channelId).fetch()[0];
       
@@ -116,5 +116,21 @@ Template.Moderator.events({
       } );
     }
   },
+});
+
+
+Template.qrCode.events({
+  "click button": function(e, template) {
+    Session.set('showRegister', true);
+  }
+});
+
+Template.qrCode.helpers({
+  showQrDiv : function() {
+    return Session.get('showRegister'); 
+  },
+  getCurrentUrl : function() {
+    return "localhost:3000" + FlowRouter.current().path;
+  }
 });
 
