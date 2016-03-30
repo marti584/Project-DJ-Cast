@@ -3,8 +3,16 @@ img.playerimg {
     display: inline-block;
  	margin-left: auto;
   	margin-right: auto;
-  	width: 450px;
-    height: 450px;
+  	width: 640px;
+    height: 480px;
+}
+
+
+img.historyQ {
+    float:left;
+    width: 200px;
+    height: 200px;
+    
 }
 
 body{
@@ -34,6 +42,11 @@ div.headright{
 	padding-top:20px;
     width:450px;
 
+}
+
+div.upnext {
+    float:left;
+    width:50%;
 }
 
 btn-o{
@@ -81,6 +94,14 @@ h3.songname{
 	margin-top:5px;
 	color: #E4E4E4;
     text-align: left;
+}
+
+h3.upnextsongname {
+    padding-bottom:5px;
+    margin-top:5px;
+    color: #E4E4E4;
+    text-align: left;
+    font-size: 15px;
 }
 
 h1.roomtitle{
