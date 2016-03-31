@@ -4,22 +4,23 @@
       <section>
         <div class="headleft">
           <h1 class="roomtitle">{{title}}</h1>
-          <h4 class="roomdesc">{{query}}</h4>
-          
-        </div>
-        <div class="upnext">
+          <h4 class="roomdesc">{{query}} </h4>
+
+
+
+                  <div class="upnext">
         {{#with nextS}}
           
-          <img src="{{thumbnail}}" class="historyQ">
-          
           <h3 class="upnextsongname">Up next.. {{title}}</h3>
+          <img src="{{thumbnail}}" class="historyQ">
         
         {{/with}}
         </div>
-       <div class="headright" style="float:right;">
+        </div>
+
+       <div class="headright">
           <!-- <input type="text" name="search" class="textbox" placeholder="Request Song..."> -->{{> searchBox}}<p></p>
-                    <a href="https://twitter.com/share" class="twitter-share-button" data-text="Listening to {{title}} on DJ-Cast" data-via="djcast_">Tweet</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                  <p><br><a href="https://twitter.com/share" class="twitter-share-button" data-text="Listening to {{title}} on DJ-Cast" data-via="djcast_">Tweet</a></p>
         </div>
       </section>
 
@@ -44,16 +45,25 @@
         <h3 class="songname">{{title}}</h3>
         </div>
 
+
+
+
         </div>
+
+
+
       {{/with}}
-    </div>
-	{{/with}}
+
   <div>
     {{#each getRecent}}
 
           <img src="{{thumbnail}}" class="historyQ">
     {{/each}}
-  </div>
+ </div> 
+
+    </div>
+	{{/with}}
+
 </template>
 
 
@@ -152,6 +162,24 @@
       }
 
     }
+
+    !function(d,s,id){
+      var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';
+      if(!d.getElementById(id)){
+        js=d.createElement(s);
+        js.id=id;js.src=p+'://platform.twitter.com/widgets.js';
+        fjs.parentNode.insertBefore(js,fjs);
+      }
+    }(document, 'script', 'twitter-wjs');
+
+    $(document).mouseup(function (e){
+      var container = $("list-group");
+      if (!container.is(e.target) // if the target of the click isn't the container...
+        && container.has(e.target).length === 0) // ... nor a descendant of the container
+      {
+        container.hide();
+      }
+    });
 
     
 
