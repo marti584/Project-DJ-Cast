@@ -15,6 +15,7 @@
 
          <div class="headright">
           {{> searchBox}}<p></p>
+                    {{> suggestionModal}}<p></p>
                     <p><br><a href="https://twitter.com/share" class="twitter-share-button" data-text="Listening to {{title}} on DJ-Cast" data-via="djcast_">Tweet</a></p>
           {{> qrCode }}
 
@@ -68,6 +69,36 @@
   </div>
 </template>
 
+<template name="suggestionModal">
+<button type="button" id="largeCreate" class="suggestionButton" data-toggle="modal" data-target="#myModal2">Suggestions</button>
+<!-- Modal -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Suggested Songs
+
+        </h4>
+      </div>
+      <div class="modal-body" id="modal">
+        <form>
+          
+        </form>
+        
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+</template>
+
 <template name="Moderator">
   <div id="player"></div>
   <br>
@@ -110,6 +141,16 @@
     function onPlayerStateChange(event) {
       if (event.data == YT.PlayerState.ENDED) {
         var channelId = FlowRouter.getParam('id');
+        var song = Song.getLatest(channelId).fetch()[0];
+      
+        var hist = new History();
+        hist.set("title", song.title);
+        hist.set("videoID", song.videoID);
+        hist.set("thumbnail", song.thumbnail);
+        hist.set("source", song.source); 
+        hist.set("channelID", song.channelID);
+  
+        Meteor.call('/history/new', hist, function(err, res){});
         Meteor.call('/song/remove', Song.getLatest(channelId).fetch()[0], function(err, res) { 
           if (err) {}
             if (Song.getLatest(channelId).fetch()[0]) {
