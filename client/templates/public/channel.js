@@ -22,6 +22,10 @@ Template.channel.helpers({
   isModerator: function() {
     var channelId = FlowRouter.getParam('id');
     return User.me()._id == Channel.findOne(channelId).creator;
+  },
+  getQueue: function() {
+    var channelId = FlowRouter.getParam('id');
+    return Song.getChannelList(channelId);
   }
 });
 

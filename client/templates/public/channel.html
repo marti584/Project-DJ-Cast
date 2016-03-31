@@ -28,12 +28,30 @@
         <h3 class="songname">{{title}}</h3>
         </div>
 
+        <div class="queue-group">
+        <h3 class="queue-head">Upcoming Songs</h3>
+        {{#each getQueue}}
+          <a href="#" class="queue-group-item">
+          <div class="row" style="margin-bottom: 10px;">
+            <div class="col-md-7">
+              <h4 class="queue-group-item-heading">{{title}}</h4>
+            </div>
+            <div class="col-md-5">
+              <span>
+                <input id="downVoteButon" type="button" value="Downvote" OnClick="" style="width: 100px;"/>
+                <input id="upVoteButton" type="button" value="Upvote" OnClick="" style="width: 100px;"/>
+              </span>
+            </div>
+          </div>
+          </a>
+        {{/each}}
+        </div>
+
         </div>
       {{/with}}
     </div>
 	{{/with}}
 </template>
-
 
 <template name="searchBox">
   <input type="text" id="search-box" placeholder="search youtube here">
