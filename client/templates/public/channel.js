@@ -24,9 +24,17 @@ Template.channel.helpers({
     var channelId = FlowRouter.getParam('id');
     return History.getLatest(channelId).fetch()[0];
   },
+  getRecent: function() {
+    var channelId = FlowRouter.getParam('id');
+    return History.getRecent(channelId).fetch();
+  },
   isModerator: function() {
     var channelId = FlowRouter.getParam('id');
     return User.me()._id == Channel.findOne(channelId).creator;
+  },
+  nextS: function() {
+    var channelId = FlowRouter.getParam('id');
+    return Song.getChannelList(channelId).fetch()[1];
   }
 });
 
@@ -79,6 +87,7 @@ Template.Moderator.onCreated(function() {
   var channelId = FlowRouter.getParam('id');
   this.subscribe('latestSong', channelId);
   this.subscribe('songList', channelId);
+  this.subscribe('history', channelId);
 });
 
 Template.Moderator.helpers({
