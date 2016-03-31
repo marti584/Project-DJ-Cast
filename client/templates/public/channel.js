@@ -24,9 +24,17 @@ Template.channel.helpers({
     var channelId = FlowRouter.getParam('id');
     return History.getLatest(channelId).fetch()[0];
   },
+  getRecent: function() {
+    var channelId = FlowRouter.getParam('id');
+    return History.getRecent(channelId).fetch();
+  },
   isModerator: function() {
     var channelId = FlowRouter.getParam('id');
     return User.me()._id == Channel.findOne(channelId).creator;
+  },
+  nextS: function() {
+    var channelId = FlowRouter.getParam('id');
+    return Song.getChannelList(channelId).fetch()[1];
   }
 
 });
@@ -75,10 +83,12 @@ Template.searchBox.helpers({
   }
 });
 
+
 Template.Moderator.onCreated(function() {
   var channelId = FlowRouter.getParam('id');
   this.subscribe('latestSong', channelId);
   this.subscribe('songList', channelId);
+  this.subscribe('history', channelId);
 });
 
 Template.Moderator.helpers({
@@ -95,7 +105,6 @@ Template.Moderator.helpers({
 Template.Moderator.events({
   "click input": function (e, template) {
     if (e.target.id == "skipButton") {
-      console.log("Removes")
       var channelId = FlowRouter.getParam('id');
       var song = Song.getLatest(channelId).fetch()[0];
       
@@ -234,3 +243,22 @@ Template.Moderator.events({
   },
 });
 
+Template.qrCode.events({
+  "click button": function(e, template) {
+    var status = document.getElementsByClassName('showQr')[0].hidden;
+    document.getElementsByClassName('showQr')[0].hidden = !status;
+  }
+});
+
+Template.qrCode.helpers({
+  getCurrentUrl : function() {
+    return "localhost:3000" + FlowRouter.current().path;
+  }
+});
+
+Template.sourceSelect.helpers({
+  getCurrentScr: function() {
+    var sel = document.getElementById('src');
+    return sel.options[ sel.selectedIndex ].value;
+  }
+});

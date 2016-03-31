@@ -3,8 +3,21 @@ img.playerimg {
     display: inline-block;
  	margin-left: auto;
   	margin-right: auto;
-  	width: 450px;
-    height: 450px;
+  	width: 480px;
+    height: 270px;
+    object-fit: cover;
+}
+
+
+
+img.historyQ {
+    width: 200px;
+    height: 110px;
+    object-fit: cover;
+    margin:0px 1px 10px 1px;
+    border-radius: 8px;
+
+    
 }
 
 body{
@@ -34,6 +47,21 @@ div.headright{
 	padding-top:20px;
     width:450px;
 
+}
+
+div.upnext {
+    float:left;
+    width:50%;
+    position:absolute;
+}
+
+div.showQr {
+    background-color: white;
+    margin: auto auto;
+    text-align: center;
+    width: 300px;
+    height: 300px;
+    padding-top: 22px;
 }
 
 btn-o{
@@ -81,6 +109,17 @@ h3.songname{
 	margin-top:5px;
 	color: #E4E4E4;
     text-align: left;
+    margin-left: 55px;
+    margin-right: 60px;
+}
+
+h3.upnextsongname {
+    padding-bottom:5px;
+    margin-top:5px;
+    color: #E4E4E4;
+    text-align: left;
+    font-size: 15px;
+    margin-right: 280px;
 }
 
 h1.roomtitle{
@@ -128,6 +167,11 @@ img.control{
     display:inline-block;
 }
 
+div.historyQueue{
+    margin: 0 auto;
+    text-align: center;
+}
+
 .btn-info {
   color: #fff;
   background-color: #000;
@@ -141,28 +185,37 @@ img.control{
     position: absolute;
 }
 
-.list-group-item{
+a.list-group-item{
     width: 400px;
     background-color: rgba(0,0,0,.8);
 
 }
 
-.list-group-item:hover{
-    width: 400px;
+.list-group-item{
     background-color: rgba(0,0,0,.8);
+}
+
+a.list-group-item:hover{
+    width: 400px;
+    background-color: rgba(0,0,0,.3);
 
 }
 
 .list-group-item-heading{
     font-size: 16px;
-    margin-top: 0px;
-    margin-bottom: 5px;
     background-color: rgba(0,0,0,0);
+    text-align: left;
 }
 
 .col-md-1{
     padding-left: 5px;
-    width:130px;
+    width:30%;
+}
+
+.col-md-11{
+    padding-right: 5px;
+    padding-left: 0px;
+    width:70%;
 }
 
 .twitter-share-button{
