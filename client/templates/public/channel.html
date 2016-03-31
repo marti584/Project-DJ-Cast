@@ -44,8 +44,8 @@
 </template>
 
 <template name="qrCode">
-  <button type="button">QR</button>
-    <div class="showQr" style = "display:false;">
+  <button type="button" class="socialbutton">QR</button>
+    <div class="showQr" hidden = "true;">
       {{> QrCode text=getCurrentUrl }}
     </div>
 </template> 
