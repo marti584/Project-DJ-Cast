@@ -18,13 +18,11 @@
       </section>
       {{#with currentSong}}
         <div class="player">
-
         {{#if isModerator}}
         {{> Moderator videoId=videoID }}
         {{else}}
         <img src="{{thumbnail}}" class="playerimg">
         {{/if}}
-
         <div class="playermeta">
         <h3 class="songname">{{title}}</h3>
         </div>
