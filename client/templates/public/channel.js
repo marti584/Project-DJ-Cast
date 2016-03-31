@@ -118,7 +118,6 @@ Template.Moderator.events({
   },
 });
 
-
 Template.qrCode.events({
   "click button": function(e, template) {
     var status = document.getElementsByClassName('showQr')[0].hidden;
@@ -132,3 +131,9 @@ Template.qrCode.helpers({
   }
 });
 
+Template.sourceSelect.helpers({
+  getCurrentScr: function() {
+    var sel = document.getElementById('src');
+    return sel.options[ sel.selectedIndex ].value;
+  }
+});
