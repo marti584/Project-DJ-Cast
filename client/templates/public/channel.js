@@ -121,14 +121,12 @@ Template.Moderator.events({
 
 Template.qrCode.events({
   "click button": function(e, template) {
-    Session.set('showRegister', true);
+    var status = document.getElementsByClassName('showQr')[0].hidden;
+    document.getElementsByClassName('showQr')[0].hidden = !status;
   }
 });
 
 Template.qrCode.helpers({
-  showQrDiv : function() {
-    return Session.get('showRegister'); 
-  },
   getCurrentUrl : function() {
     return "localhost:3000" + FlowRouter.current().path;
   }

@@ -36,15 +36,10 @@
 
 
 <template name="qrCode">
-      <button type="button">QR</button>
-      {{#if showQrDiv}}
-      <div class="showQr">
-        {{> QrCode text=getCurrentUrl }}
-      </div>
-     {{else}}
-      <div class="hide">
-      </div>
-    {{/if}}
+  <button type="button">QR</button>
+    <div class="showQr" style = "display:false;">
+      {{> QrCode text=getCurrentUrl }}
+    </div>
 </template> 
 
 
