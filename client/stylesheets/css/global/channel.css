@@ -179,7 +179,7 @@ div.historyQueue{
     text-align: center;
     height: 120px;
     overflow: hidden;
-    
+
 }
 
 .btn-info {
@@ -190,9 +190,13 @@ div.historyQueue{
 }
 
 .list-group{
-    padding-top: 25px;
-    padding-left: 50px;
+    margin-top: 25px;
+    margin-left: 50px;
     position: absolute;
+    overflow-y: scroll;
+    max-height: 80%;
+    border-radius: 8px;
+    border: 1px solid #ddd;
 }
 
 a.list-group-item{
