@@ -100,6 +100,8 @@ h3.songname{
 	margin-top:5px;
 	color: #E4E4E4;
     text-align: left;
+    margin-left: 55px;
+    margin-right: 60px;
 }
 
 h3.upnextsongname {
@@ -108,6 +110,7 @@ h3.upnextsongname {
     color: #E4E4E4;
     text-align: left;
     font-size: 15px;
+    margin-right: 280px;
 }
 
 h1.roomtitle{
