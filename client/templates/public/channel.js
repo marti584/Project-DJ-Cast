@@ -30,9 +30,27 @@ Template.channel.helpers({
   },
   getQueue: function() {
     var channelId = FlowRouter.getParam('id');
-    return Song.getChannelList(channelId);
+    return Song.getQueue(channelId);
   }
 });
+
+Template.channel.events({
+  "click input": function(e) {
+    if (e.target.id == "upvoteButton") {
+      var song = Song.find({_id: this._id}).fetch()[0];
+      Meteor.call('/songs/upvote', song, function(err, res) { 
+
+      } );
+    }
+    if (e.target.id == "downvoteButton") {
+      console.log("downvote");
+      var song = Song.find({_id: this._id}).fetch()[0];
+      Meteor.call('/songs/downvote', song, function(err, res) { 
+
+      } );
+    }
+  }
+})
 
 Template.searchBox.onCreated(function() {
   var self = this;

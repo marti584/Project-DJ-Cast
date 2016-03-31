@@ -60,7 +60,6 @@ Song = Astronomy.createClass({
  * @return {Mongo.Cursor} the resulting Mongo cursor from find()
  */
 Song.getLatest = function(channelID) {
-
   return Song.find({
     channelID: channelID
   }, {
@@ -72,5 +71,13 @@ Song.getLatest = function(channelID) {
 Song.getChannelList = function(channelID) {
   return Song.find({
     channelID: channelID
+  });
+}
+
+Song.getQueue = function(channelID) {
+  return Song.find({
+    channelID: channelID
+  }, {
+    sort: {votes: -1}
   });
 }
