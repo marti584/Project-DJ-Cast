@@ -4,8 +4,6 @@ Template.openchannels.onCreated(function() {
 
 Template.openchannels.helpers({
 	channels: function() {
-		console.log("hi");
-		console.log(Channel.getLatest().fetch());
     return Channel.getLatest().fetch();
   }
 
@@ -13,7 +11,6 @@ Template.openchannels.helpers({
 
 Template.openchannels.events({
     'click': function(err, res){
-    	console.log(this);
         FlowRouter.go(`/channels/${this._id}`);
     }
 });

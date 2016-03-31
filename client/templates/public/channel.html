@@ -4,7 +4,7 @@
       <section>
         <div class="headleft">
           <h1 class="roomtitle">{{title}}</h1>
-          <h4 class="roomdesc">{{query}} </h4>
+          <h4 class="roomdesc">{{query}}</h4>
           <div class="upnext">
             {{#with nextS}}
               <h3 class="upnextsongname">Up next.. {{title}}</h3>
@@ -17,6 +17,7 @@
           {{> searchBox}}<p></p>
                     <p><br><a href="https://twitter.com/share" class="twitter-share-button" data-text="Listening to {{title}} on DJ-Cast" data-via="djcast_">Tweet</a></p>
           {{> qrCode }}
+          {{> sourceSelect}}
 
         </div>
       </section>
@@ -43,6 +44,13 @@
 	{{/with}}
 </template>
 
+<template name="sourceSelect">
+  <select id="src">
+    <option value="youtube">Youtube</option>
+    <option value="soundcloud">SoundCloud</option>
+  </select>
+</template>
+
 <template name="qrCode">
   <button type="button">QR</button>
     <div class="showQr" style = "display:false;">
@@ -51,21 +59,21 @@
 </template> 
 
 <template name="searchBox">
-  <input type="text" class="search" id="search-box" placeholder="search youtube here">
-  <div class="list-group">
-  {{#each getSearchResults}}
-      <a href="#" class="list-group-item">
-      <div class="row">
-        <div class="col-md-1">
-          <img src="{{snippet.thumbnails.default.url}}" class="img-responsive"/>
+  <input type="text" class="search" id="search-box" placeholder="search here">
+    <div class="list-group">
+    {{#each getSearchResults}}
+        <a href="#" class="list-group-item">
+        <div class="row">
+          <div class="col-md-1">
+            <img src="{{snippet.thumbnails.default.url}}" class="img-responsive"/>
+          </div>
+          <div class="col-md-11">
+            <h4 class="list-group-item-heading">{{snippet.title}}</h4>
+          </div>
         </div>
-        <div class="col-md-11">
-          <h4 class="list-group-item-heading">{{snippet.title}}</h4>
-        </div>
-      </div>
-      </a>
-  {{/each}}
-  </div>
+        </a>
+    {{/each}}
+    </div>
 </template>
 
 <template name="Moderator">
