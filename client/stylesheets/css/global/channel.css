@@ -55,6 +55,15 @@ div.upnext {
     position:absolute;
 }
 
+div.showQr {
+    background-color: white;
+    margin: auto auto;
+    text-align: center;
+    width: 300px;
+    height: 300px;
+    padding-top: 22px;
+}
+
 btn-o{
     float:right;
 }

@@ -5,67 +5,50 @@
         <div class="headleft">
           <h1 class="roomtitle">{{title}}</h1>
           <h4 class="roomdesc">{{query}} </h4>
-
-
-
-                  <div class="upnext">
-        {{#with nextS}}
-          
-          <h3 class="upnextsongname">Up next.. {{title}}</h3>
-          <img src="{{thumbnail}}" class="historyQ">
-        
-        {{/with}}
-        </div>
+          <div class="upnext">
+            {{#with nextS}}
+              <h3 class="upnextsongname">Up next.. {{title}}</h3>
+              <img src="{{thumbnail}}" class="historyQ">
+            {{/with}}
+          </div>
         </div>
 
-       <div class="headright">
-          <!-- <input type="text" name="search" class="textbox" placeholder="Request Song..."> -->{{> searchBox}}<p></p>
-                  <p><br><a href="https://twitter.com/share" class="twitter-share-button" data-text="Listening to {{title}} on DJ-Cast" data-via="djcast_">Tweet</a></p>
+         <div class="headright">
+          {{> searchBox}}<p></p>
+                    <p><br><a href="https://twitter.com/share" class="twitter-share-button" data-text="Listening to {{title}} on DJ-Cast" data-via="djcast_">Tweet</a></p>
+          {{> qrCode }}
+
         </div>
       </section>
 
       {{#with currentSong}}
-
         <div class="player">
-
-
-
-        
-        <!-- <img src="http://www.billboard.com/files/styles/gallery_main_well_2/public/media/M-I-A-Kala-album-covers-billboard-1000x1000.jpg" class="playerimg"> -->
-        {{#if isModerator}}
-        {{> Moderator videoId=videoID }}
-
-        {{else}}
-        <img src="{{thumbnail}}" class="playerimg">
-        {{/if}}
-
-        
-
-        <div class="playermeta">
-        <h3 class="songname">{{title}}</h3>
+          {{#if isModerator}}
+            {{> Moderator videoId=videoID }}
+          {{else}}
+            <img src="{{thumbnail}}" class="playerimg">
+          {{/if}}
+          <div class="playermeta">
+            <h3 class="songname">{{title}}</h3>
+          </div>
         </div>
-
-
-
-
-        </div>
-
-
-
       {{/with}}
 
-  <div class="historyQueue">
-    {{#each getRecent}}
-
-          <img src="{{thumbnail}}" class="historyQ">
-    {{/each}}
- </div> 
-
-    </div>
+    <div class="historyQueue">
+      {{#each getRecent}}
+        <img src="{{thumbnail}}" class="historyQ">
+      {{/each}}
+    </div> 
+  </div>
 	{{/with}}
-
 </template>
 
+<template name="qrCode">
+  <button type="button">QR</button>
+    <div class="showQr" style = "display:false;">
+      {{> QrCode text=getCurrentUrl }}
+    </div>
+</template> 
 
 <template name="searchBox">
   <input type="text" class="search" id="search-box" placeholder="search youtube here">
@@ -85,18 +68,9 @@
   </div>
 </template>
 
-
 <template name="Moderator">
   <div id="player"></div>
   <br>
-  <!--<label id="title" ></label>
-  <br>
-  <span style="display: inline;">
-    <label id="elapsed"></label>
-    <label >/</label>
-    <label id="duration"></label>
-  </span>
-  <br>-->
   <span style="display: inline;">
     <input id="playPauseButton" class="playskip" type="button" value="Pause" OnClick="playPauseClick()"/>
     <input id="skipButton" class="playskip" type="button" value="Skip" OnClick="skipClick()"/>
@@ -130,8 +104,6 @@
     }
 
     function onPlayerReady(event) {
-      //document.getElementById("title").innerText = player.getVideoData().title;
-      //document.getElementById("duration").innerText = player.getDuration;
       event.target.playVideo();
     }
 
@@ -145,8 +117,6 @@
               player.playVideo();
             }
         });
-        //document.getElementById("title").innerText = player.getVideoData().title;
-        //document.getElementById("duration").innerText = player.getDuration();
       }
     }
 
@@ -172,12 +142,5 @@
       }
     }(document, 'script', 'twitter-wjs');
 
-
-    
-
-
   </script>
-  <!--{{> myButtons}}-->
 </template>
-
-
