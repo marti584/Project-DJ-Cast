@@ -177,6 +177,9 @@ img.control{
 div.historyQueue{
     margin: 0 auto;
     text-align: center;
+    height: 120px;
+    overflow: hidden;
+    
 }
 
 .btn-info {
