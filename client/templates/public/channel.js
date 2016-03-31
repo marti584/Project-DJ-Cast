@@ -60,6 +60,7 @@ Template.searchBox.events({
     newsong.set("thumbnail", this.snippet.thumbnails.high.url);
     newsong.set("source", this.id.kind); 
     newsong.set("channelID", FlowRouter.getParam('id'));
+    newsong.set("votes", 1);
 
     Meteor.call('/youtube/new', newsong, function(err, res) { 
 

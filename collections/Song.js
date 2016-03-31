@@ -32,13 +32,19 @@ Song = Astronomy.createClass({
     source: {
       validator: [
         Validators.required(),
-        Validators.string(),
+        Validators.string()
       ]
     },
     channelID: {
       validator: [
         Validators.required(),
         Validators.string()
+      ]
+    }, 
+    votes: {
+      validator: [
+        Validators.required(),
+        Validators.number()
       ]
     }
   },
