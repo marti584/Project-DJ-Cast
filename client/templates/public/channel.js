@@ -34,7 +34,6 @@ Template.channel.helpers({
   },
   nextS: function() {
     var channelId = FlowRouter.getParam('id');
-    console.log(Song.getChannelList(channelId).fetch()[1].title);
     return Song.getChannelList(channelId).fetch()[1];
   }
 });
@@ -96,7 +95,6 @@ Template.Moderator.helpers({
     return Song.getLatest(channelId).fetch()[0];
   },
   nextSong: function() {
-    console.log(Song.getChannelList(channelId).fetch()[1].title);
     var channelId = FlowRouter.getParam('id');
     return Song.getChannelList(channelId).fetch()[1].videoID;
   }
