@@ -11,10 +11,11 @@ img.playerimg {
 
 
 img.historyQ {
-    float:left;
     width: 200px;
     height: 110px;
     object-fit: cover;
+    margin-bottom:10px;
+    border-radius: 8px;
 
     
 }
@@ -154,6 +155,11 @@ img.control{
     display:inline-block;
 }
 
+div.historyQueue{
+    margin: 0 auto;
+    text-align: center;
+}
+
 .btn-info {
   color: #fff;
   background-color: #000;
@@ -202,6 +208,4 @@ a.list-group-item:hover{
 
 .twitter-share-button{
     float:right;
-    position:fixed;
-
 }

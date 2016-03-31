@@ -54,7 +54,7 @@
 
       {{/with}}
 
-  <div>
+  <div class="historyQueue">
     {{#each getRecent}}
 
           <img src="{{thumbnail}}" class="historyQ">
@@ -112,15 +112,15 @@
     var player;
     function onYouTubeIframeAPIReady() {
       player = new YT.Player('player', {
-        height: '400',
-        width: '600',
+        height: '270',
+        width: '480',
         videoId: '{{videoId}}',
         playerVars: {
           'autoplay': 1,
           'controls': 0,
           'disablekb': 1,
           'enablejsapi': 1,
-          'rel': 0
+          'rel': 0,
         },
         events: {
           'onReady': onPlayerReady,
@@ -172,14 +172,6 @@
       }
     }(document, 'script', 'twitter-wjs');
 
-    $(document).mouseup(function (e){
-      var container = $("list-group");
-      if (!container.is(e.target) // if the target of the click isn't the container...
-        && container.has(e.target).length === 0) // ... nor a descendant of the container
-      {
-        container.hide();
-      }
-    });
 
     
 
