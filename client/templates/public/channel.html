@@ -4,36 +4,44 @@
       <section>
         <div class="headleft">
           <h1 class="roomtitle">{{title}}</h1>
-          <h4 class="roomdesc">{{query}}</h4>
-         </div>
-        <div class="headright" style="float:right;">
+          <h4 class="roomdesc">{{query}} </h4>
+          <div class="upnext">
+            {{#with nextS}}
+              <h3 class="upnextsongname">Up next.. {{title}}</h3>
+              <img src="{{thumbnail}}" class="historyQ">
+            {{/with}}
+          </div>
+        </div>
+
+         <div class="headright">
           {{> searchBox}}<p></p>
-                    <a href="https://twitter.com/share" class="twitter-share-button" data-text="Listening to {{title}} on DJ-Cast" data-via="djcast_">Tweet</a>
-        {{> qrCode }}
-
-
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                    <p><br><a href="https://twitter.com/share" class="twitter-share-button" data-text="Listening to {{title}} on DJ-Cast" data-via="djcast_">Tweet</a></p>
+          {{> qrCode }}
 
         </div>
       </section>
+
       {{#with currentSong}}
         <div class="player">
-
-        {{#if isModerator}}
-        {{> Moderator videoId=videoID }}
-        {{else}}
-        <img src="{{thumbnail}}" class="playerimg">
-        {{/if}}
-
-        <div class="playermeta">
-        <h3 class="songname">{{title}}</h3>
-        </div>
+          {{#if isModerator}}
+            {{> Moderator videoId=videoID }}
+          {{else}}
+            <img src="{{thumbnail}}" class="playerimg">
+          {{/if}}
+          <div class="playermeta">
+            <h3 class="songname">{{title}}</h3>
+          </div>
         </div>
       {{/with}}
-    </div>
+
+    <div class="historyQueue">
+      {{#each getRecent}}
+        <img src="{{thumbnail}}" class="historyQ">
+      {{/each}}
+    </div> 
+  </div>
 	{{/with}}
 </template>
-
 
 <template name="qrCode">
   <button type="button">QR</button>
@@ -41,7 +49,6 @@
       {{> QrCode text=getCurrentUrl }}
     </div>
 </template> 
-
 
 <template name="searchBox">
   <input type="text" class="search" id="search-box" placeholder="search youtube here">
@@ -61,7 +68,6 @@
   </div>
 </template>
 
-
 <template name="Moderator">
   <div id="player"></div>
   <br>
@@ -80,15 +86,15 @@
     var player;
     function onYouTubeIframeAPIReady() {
       player = new YT.Player('player', {
-        height: '400',
-        width: '600',
+        height: '270',
+        width: '480',
         videoId: '{{videoId}}',
         playerVars: {
           'autoplay': 1,
           'controls': 0,
           'disablekb': 1,
           'enablejsapi': 1,
-          'rel': 0
+          'rel': 0,
         },
         events: {
           'onReady': onPlayerReady,
@@ -98,8 +104,6 @@
     }
 
     function onPlayerReady(event) {
-      //document.getElementById("title").innerText = player.getVideoData().title;
-      //document.getElementById("duration").innerText = player.getDuration;
       event.target.playVideo();
     }
 
@@ -113,8 +117,6 @@
               player.playVideo();
             }
         });
-        //document.getElementById("title").innerText = player.getVideoData().title;
-        //document.getElementById("duration").innerText = player.getDuration();
       }
     }
 
@@ -131,11 +133,14 @@
 
     }
 
-    
-
+    !function(d,s,id){
+      var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';
+      if(!d.getElementById(id)){
+        js=d.createElement(s);
+        js.id=id;js.src=p+'://platform.twitter.com/widgets.js';
+        fjs.parentNode.insertBefore(js,fjs);
+      }
+    }(document, 'script', 'twitter-wjs');
 
   </script>
-  <!--{{> myButtons}}-->
 </template>
-
-
