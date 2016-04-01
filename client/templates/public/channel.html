@@ -18,8 +18,13 @@
 
          <div class="headright">
           {{> searchBox}}<p></p>
-                    <p><br><a href="https://twitter.com/share" class="twitter-share-button" data-text="Listening to {{title}} on DJ-Cast" data-via="djcast_">Tweet</a></p>
+                    <p><br>
 
+
+<a href="https://twitter.com/share" class="twitter-share-button" data-text="I am listening to {{title}} on #djcast_" data-via="djcast_">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                    </p>
+          {{> suggestionModal}}<p></p>
           {{#if isModerator}}
             {{> qrCode }}
           {{/if}}
@@ -48,6 +53,7 @@
     </div> 
   </div>
 	{{/with}}
+
 </template>
 
 <template name="sourceSelect">
@@ -58,28 +64,55 @@
 </template>
 
 <template name="qrCode">
-  <button type="button">QR</button>
-    <div class="showQr" style = "display:false;">
+  <button type="button" class="socialbutton">QR</button>
+    <div class="showQr" hidden = "true;">
       {{> QrCode text=getCurrentUrl }}
     </div>
 </template>
 
 <template name="searchBox">
-  <input type="text" class="search" id="search-box" placeholder="search here">
-    <div class="list-group">
-    {{#each getSearchResults}}
-        <a href="#" class="list-group-item">
-        <div class="row">
-          <div class="col-md-1">
-            <img src="{{snippet.thumbnails.default.url}}" class="img-responsive"/>
-          </div>
-          <div class="col-md-11">
-            <h4 class="list-group-item-heading">{{snippet.title}}</h4>
-          </div>
+  <input type="text" class="search" id="search-box" placeholder="search youtube here">
+  <div class="list-group" hidden = "true;">
+  {{#each getSearchResults}}
+      <a href="#" class="list-group-item">
+      <div class="row">
+        <div class="col-md-1">
+          <img src="{{snippet.thumbnails.default.url}}" class="img-responsive"/>
         </div>
+        <div class="col-md-11">
+          <h4 class="list-group-item-heading">{{snippet.title}}</h4>
+        </div>
+      </div>
         </a>
     {{/each}}
     </div>
+</template>
+
+<template name="suggestionModal">
+<button type="button" id="largeCreate" class="suggestionButton" data-toggle="modal" data-target="#myModal2">Suggestions</button>
+<!-- Modal -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Suggested Songs
+
+        </h4>
+      </div>
+      <div class="modal-body" id="modal">
+        <form>
+          
+        </form>
+        
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
 </template>
 
 <template name="Moderator">
@@ -87,7 +120,7 @@
   <br>
   <span style="display: inline;">
     <input id="playPauseButton" class="playskip" type="button" value="Pause" OnClick="playPauseClick()"/>
-    <input id="skipButton" class="playskip" type="button" value="Skip" OnClick="skipClick()"/>
+    <input id="skipButton" class="playskip" type="button" value="Skip"/>
   </span>
 
   <script>
@@ -124,6 +157,16 @@
     function onPlayerStateChange(event) {
       if (event.data == YT.PlayerState.ENDED) {
         var channelId = FlowRouter.getParam('id');
+        var song = Song.getLatest(channelId).fetch()[0];
+      
+        var hist = new History();
+        hist.set("title", song.title);
+        hist.set("videoID", song.videoID);
+        hist.set("thumbnail", song.thumbnail);
+        hist.set("source", song.source); 
+        hist.set("channelID", song.channelID);
+  
+        Meteor.call('/history/new', hist, function(err, res){});
         Meteor.call('/song/remove', Song.getLatest(channelId).fetch()[0], function(err, res) { 
           if (err) {}
             if (Song.getLatest(channelId).fetch()[0]) {
@@ -146,15 +189,6 @@
       }
 
     }
-
-    !function(d,s,id){
-      var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';
-      if(!d.getElementById(id)){
-        js=d.createElement(s);
-        js.id=id;js.src=p+'://platform.twitter.com/widgets.js';
-        fjs.parentNode.insertBefore(js,fjs);
-      }
-    }(document, 'script', 'twitter-wjs');
 
   </script>
 </template>
