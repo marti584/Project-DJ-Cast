@@ -1,3 +1,6 @@
+var recommendList = [];
+var recommendationList = [];
+
 Template.channel.onCreated(function() {
   var self = this;
   self.autorun(function() {
@@ -32,12 +35,57 @@ Template.channel.helpers({
     var channelId = FlowRouter.getParam('id');
     return User.me()._id == Channel.findOne(channelId).creator;
   },
+
+  getQueue: function() {
+    var channelId = FlowRouter.getParam('id');
+    var currentSong = Song.getLatest(channelId).fetch()[0];
+    console.log(currentSong);
+    return Song.getQueue(channelId, currentSong._id).fetch();
+  },
+
   nextS: function() {
     var channelId = FlowRouter.getParam('id');
-    return Song.getChannelList(channelId).fetch()[1];
+    var currentSong = Song.getLatest(channelId).fetch()[0];
+    return Song.getQueue(channelId, currentSong._id).fetch()[0];
+  },
+
+  recommendations: function() {
+    console.log(recommendationList.toString());
+    return recommendationList.toString();
   }
+  
 
 });
+
+Template.channel.events({
+  'click button': function(e, tmpl) {
+    if (e.currentTarget.id === "CloseRoom") {
+      e.stopPropagation();
+      var channel = Channel.findOne(this._id);
+      Meteor.call('/channels/end', channel, function(err, res) {
+          FlowRouter.go('/channels');
+      });
+    }
+  },
+});
+
+Template.channel.events({
+  "click input": function(e) {
+    if (e.target.id == "upvoteButton") {
+      var song = Song.find({_id: this._id}).fetch()[0];
+      Meteor.call('/songs/upvote', song, function(err, res) { 
+
+      } );
+    }
+    if (e.target.id == "downvoteButton") {
+      console.log("downvote");
+      var song = Song.find({_id: this._id}).fetch()[0];
+      Meteor.call('/songs/downvote', song, function(err, res) { 
+
+      } );
+    }
+  }
+})
 
 Template.searchBox.onCreated(function() {
   var self = this;
@@ -58,9 +106,6 @@ Template.searchBox.events({
       }
       template.urls.set(res.items);
     });
-    
-    
-
   }, 1000),
   "click .list-group-item": function (e, template) {
     var newsong = new Song();
@@ -69,12 +114,14 @@ Template.searchBox.events({
     newsong.set("thumbnail", this.snippet.thumbnails.high.url);
     newsong.set("source", this.id.kind); 
     newsong.set("channelID", FlowRouter.getParam('id'));
+    newsong.set("votes", 1);
 
-    document.getElementsByClassName('list-group')[0].hidden = true;
-    document.getElementsByClassName('search')[0].placeholder = 'search youtube here';
+    document.getElementsByClassName('list-group')[0].hidden = true;   
+    document.getElementsByClassName('search')[0].value = '';
     Meteor.call('/youtube/new', newsong, function(err, res) { 
 
     } );
+
   }
 });
 
@@ -85,6 +132,14 @@ Template.searchBox.helpers({
 
   checkCharCount: function(title) {
     return title.length < 40;
+  }
+});
+
+
+Template.suggestionModal.helpers({
+  recommendMe: function() {
+    
+    return recommendList.toString();
   }
 });
 
@@ -103,7 +158,8 @@ Template.Moderator.helpers({
   },
   nextSong: function() {
     var channelId = FlowRouter.getParam('id');
-    return Song.getChannelList(channelId).fetch()[1].videoID;
+    var currentSong = Song.getLatest(channelId).fetch()[0];
+    return Song.getQueue(channelId, currentSong._id).fetch()[0];
   }
 });
 
@@ -132,7 +188,7 @@ Template.Moderator.events({
       
       
       Meteor.call('/history/new', hist, function(err, res){});
-      Meteor.call('/song/remove', Song.getLatest(channelId).fetch()[0], function(err, res) { 
+      Meteor.call('/song/remove', song, function(err, res) { 
         if (err) {}
           if (Song.getLatest(channelId).fetch()[0]) {
             player.loadVideoById(Song.getLatest(channelId).fetch()[0].videoID, 0, "default");
@@ -249,13 +305,10 @@ Template.Moderator.events({
 					async: false
 				});
 			}
-
-			console.log("Recommend:");
 			for(k = 0; k < recommendations.length; k++){
-				console.log(recommendations[k]);
+        recommendList[k] = recommendations[k];
+				//console.log(recommendations[k]);
 			}
-
-
     }
   },
 
@@ -265,6 +318,17 @@ Template.qrCode.events({
   "click button": function(e, template) {
     var status = document.getElementsByClassName('showQr')[0].hidden;
     document.getElementsByClassName('showQr')[0].hidden = !status;
+  }
+});
+
+Template.suggestionModal.events({
+  "click button": function(e, template) {
+  
+  document.getElementById('reco').innerHTML = recommendList[0];
+  document.getElementById('reco2').innerHTML = recommendList[1];
+  document.getElementById('reco3').innerHTML = recommendList[2];
+  document.getElementById('reco4').innerHTML = recommendList[3];
+  document.getElementById('reco5').innerHTML = recommendList[4];
   }
 });
 
