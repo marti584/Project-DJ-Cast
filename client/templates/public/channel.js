@@ -39,34 +39,29 @@ Template.channel.helpers({
   getQueue: function() {
     var channelId = FlowRouter.getParam('id');
     var currentSong = Song.getLatest(channelId).fetch()[0];
-    console.log(currentSong);
-    return Song.getQueue(channelId, currentSong._id).fetch();
+    if (currentSong != null)
+      return Song.getQueue(channelId, currentSong._id).fetch();
+    else
+      return undefined;
   },
 
   nextS: function() {
     var channelId = FlowRouter.getParam('id');
     var currentSong = Song.getLatest(channelId).fetch()[0];
-    return Song.getQueue(channelId, currentSong._id).fetch()[0];
+    if (currentSong != null)
+      return Song.getQueue(channelId, currentSong._id).fetch()[0];
+    else
+      return undefined;
+  },
+  isYoutube: function() {
+    return Template.searchBox.currentSource == 'youtube';
   },
 
   recommendations: function() {
-    console.log(recommendationList.toString());
     return recommendationList.toString();
   }
   
 
-});
-
-Template.channel.events({
-  'click button': function(e, tmpl) {
-    if (e.currentTarget.id === "CloseRoom") {
-      e.stopPropagation();
-      var channel = Channel.findOne(this._id);
-      Meteor.call('/channels/end', channel, function(err, res) {
-          FlowRouter.go('/channels');
-      });
-    }
-  },
 });
 
 Template.channel.events({
@@ -103,6 +98,7 @@ Template.channel.events({
 Template.searchBox.onCreated(function() {
   var self = this;
   self.autorun(function() {
+    Template.searchBox.currentSource = 'youtube';
     self.urls = new ReactiveVar([]);
   });
 
@@ -113,21 +109,42 @@ Template.searchBox.events({
     var text = $(e.target).val().trim();
     document.getElementsByClassName('list-group')[0].hidden = false;
     self.urls = new ReactiveVar([]);
-    Meteor.call('/youtube/searchForMusic', text, 12, function(err, res) {
-      if (err) {
-        throw err;
-      }
-      template.urls.set(res.items);
-    });
+    if (Template.searchBox.currentSource == 'youtube') {
+      Meteor.call('/youtube/searchForMusic', text, 12, function(err, res) {
+        if (err) {
+          throw err;
+        }
+        template.urls.set(res.items);
+      });
+    } else if (Template.searchBox.currentSource == 'soundcloud') {
+      Meteor.call('/soundcloud/searchForMusic', text, 12, function(err, res) {
+        if (err) {
+          throw err;
+        }
+        template.urls.set(res);
+      });
+    }
   }, 1000),
   "click .list-group-item": function (e, template) {
+    var channelId = FlowRouter.getParam('id');
     var newsong = new Song();
-    newsong.set("title",this.snippet.title);
-    newsong.set("videoID", this.id.videoId);
-    newsong.set("thumbnail", this.snippet.thumbnails.high.url);
-    newsong.set("source", this.id.kind); 
+    if (Template.searchBox.currentSource == 'youtube') {
+      newsong.set("title",this.snippet.title);
+      newsong.set("videoID", this.id.videoId);
+      newsong.set("thumbnail", this.snippet.thumbnails.high.url);
+      newsong.set("source", 'youtube');
+    } else if (Template.searchBox.currentSource == 'soundcloud') {
+      newsong.set("title", this.title);
+      newsong.set("videoID", "" + this.id);
+      newsong.set("thumbnail", this.artwork_url);
+      newsong.set("source", 'soundcloud');
+    }
     newsong.set("channelID", FlowRouter.getParam('id'));
     newsong.set("votes", 1);
+    if (Song.getLatest(channelId).fetch()[0] != null)
+      newsong.set("currentlyPlaying", false);
+    else
+      newsong.set("currentlyPlaying", true);
 
     document.getElementsByClassName('list-group')[0].hidden = true;   
     document.getElementsByClassName('search')[0].value = '';
@@ -145,6 +162,15 @@ Template.searchBox.helpers({
 
   checkCharCount: function(title) {
     return title.length < 40;
+  },
+
+  getCurrentSrc: function() {
+    var sel = document.getElementById('src');
+    self.currentSource = sel.options[ sel.selectedIndex ].value;
+    return self.currentSource;
+  },
+  isYoutube: function() {
+    return Template.searchBox.currentSource == 'youtube';
   }
 });
 
@@ -173,6 +199,9 @@ Template.Moderator.helpers({
     var channelId = FlowRouter.getParam('id');
     var currentSong = Song.getLatest(channelId).fetch()[0];
     return Song.getQueue(channelId, currentSong._id).fetch()[0];
+  },
+  isYoutube: function(source) {
+    return source == 'youtube';
   }
 });
 
@@ -180,6 +209,8 @@ Template.Moderator.events({
   "click input": function (e, template) {
 
     if (e.target.id === "CloseRoom") {
+      if (sound != null)
+        sound.pause();
       e.stopPropagation();
       var channel = Channel.findOne(this._id);
       Meteor.call('/channels/end', channel, function(err, res) {
@@ -187,14 +218,40 @@ Template.Moderator.events({
       });
     }
 
-
+    if (e.target.id == "playPauseButton") {
+      var channelId = FlowRouter.getParam('id');
+      var song = Song.getLatest(channelId).fetch()[0];
+      var button = document.getElementById("playPauseButton");
+        if(button.value == "Pause"){
+          button.value = "Play";
+          if (song.source == 'youtube') {
+            player.pauseVideo();
+          }
+          else {
+            sound.pause();
+          }
+        }
+        else{
+        button.value = "Pause";
+        if (song.source == 'youtube')
+          player.playVideo()
+        else
+          sound.play();
+      }
+    }
     if (e.target.id == "skipButton") {
       var channelId = FlowRouter.getParam('id');
       var song = Song.getLatest(channelId).fetch()[0];
+      var next = Template.channel.__helpers[" nextS"]();
+
+      if (song.source == 'soundcloud')
+        sound.pause();
+      else
+        player.pauseVideo();
       
       var hist = new History();
       hist.set("title", song.title);
-      hist.set("videoID", song.videoID);
+      hist.set("videoID", "" + song.videoID);
       hist.set("thumbnail", song.thumbnail);
       hist.set("source", song.source); 
       hist.set("channelID", song.channelID);
@@ -203,9 +260,19 @@ Template.Moderator.events({
       Meteor.call('/history/new', hist, function(err, res){});
       Meteor.call('/song/remove', song, function(err, res) { 
         if (err) {}
-          if (Song.getLatest(channelId).fetch()[0]) {
-            player.loadVideoById(Song.getLatest(channelId).fetch()[0].videoID, 0, "default");
-            player.playVideo();
+          if (next != null) {
+            next.set("currentlyPlaying", true);
+            Meteor.call('/songs/currentlyPlaying', next);
+            if (next.source == 'youtube') {
+              if (player != null) {
+                player.loadVideoById(next.videoID, 0, "default");
+                player.playVideo();
+              }
+            } else {
+              if (sound != null)
+                sound.pause();
+              playSoundcloud(next.videoID);
+            }
           }
       } );
 
@@ -352,8 +419,16 @@ Template.qrCode.helpers({
 });
 
 Template.sourceSelect.helpers({
-  getCurrentScr: function() {
+  getCurrentSrc: function() {
     var sel = document.getElementById('src');
-    return sel.options[ sel.selectedIndex ].value;
+    Template.searchBox.currentSource = sel.options[ sel.selectedIndex ].value;
+    return Template.searchBox.currentSource;
+  }
+});
+
+Template.sourceSelect.events({
+  "change select": function(e, template) {
+    var sel = document.getElementById('src');
+    Template.searchBox.currentSource = sel.options[ sel.selectedIndex ].value;
   }
 });

@@ -46,6 +46,11 @@ Song = Astronomy.createClass({
         Validators.required(),
         Validators.number()
       ]
+    }, 
+    currentlyPlaying: {
+      validator: [
+        Validators.boolean()
+      ]
     }
   },
 
@@ -63,7 +68,7 @@ Song.getLatest = function(channelID) {
   return Song.find({
     channelID: channelID
   }, {
-    sort: {createdAt: 1}, 
+    sort: {currentlyPlaying: -1}, 
     limit: 1
   });
 }
@@ -75,11 +80,10 @@ Song.getChannelList = function(channelID) {
 }
 
 Song.getQueue = function(channelID, currentSongID) {
-  console.log(currentSongID);
   return Song.find({
     _id: { $ne: currentSongID },
     channelID: channelID
   }, {
-    sort: {votes: -1}
+    sort: {votes: -1, createdAt: 1}
   });
 }

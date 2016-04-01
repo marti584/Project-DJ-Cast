@@ -36,7 +36,7 @@
       {{#with currentSong}}
         <div class="player">
           {{#if isModerator}}
-            {{> Moderator videoId=videoID }}
+            {{> Moderator videoId=videoID source=source thumbnail=thumbnail}}
           {{else}}
             <img src="{{thumbnail}}" class="playerimg">
           {{/if}}
@@ -105,10 +105,18 @@
       <a href="#" class="list-group-item">
       <div class="row">
         <div class="col-md-1">
+          {{#if isYoutube}}
           <img src="{{snippet.thumbnails.default.url}}" class="img-responsive"/>
+          {{else}}
+          <img src="{{artwork_url}}" class="img-responsive"/>
+          {{/if}}
         </div>
         <div class="col-md-11">
+          {{#if isYoutube}}
           <h4 class="list-group-item-heading">{{snippet.title}}</h4>
+          {{else}}
+          <h4 class="list-group-item-heading">{{title}}</h4>
+          {{/if}}
         </div>
       </div>
         </a>
@@ -151,14 +159,158 @@
 
 <template name="Moderator">
   <div id="player"></div>
+  {{#unless isYoutube source}}<img src="{{thumbnail}}" class="playerimg" style="width: 480px; height: 480px;">{{/unless}}
   <br>
   <span>
-    <input id="playPauseButton" class="playskip" type="button" value="Pause" OnClick="playPauseClick()"/>
+    <input id="playPauseButton" class="playskip" type="button" value="Pause"/>
     <input id="skipButton" class="playskip" type="button" value="Skip"/>
     <input id="CloseRoom" type="button" class="playskip" value="Close Room">
   </span>
 
+  <script type="text/javascript" src="https://connect.soundcloud.com/sdk/sdk-3.0.0.js">
+  
+  </script>
+
+  <script type="text/javascript">
+    var sound;
+    function onPlayerStateChange(event) {
+      if (event.data == YT.PlayerState.ENDED) {
+        var channelId = FlowRouter.getParam('id');
+        var song = Song.getLatest(channelId).fetch()[0];
+        var next = Template.channel.__helpers[" nextS"]();
+      
+        var hist = new History();
+        hist.set("title", song.title);
+        hist.set("videoID", song.videoID);
+        hist.set("thumbnail", song.thumbnail);
+        hist.set("source", song.source); 
+        hist.set("channelID", song.channelID);
+  
+        Meteor.call('/history/new', hist, function(err, res){});
+        Meteor.call('/song/remove', Song.getLatest(channelId).fetch()[0], function(err, res) { 
+          if (err) {}
+            if (next != null) {
+              next.set("currentlyPlaying", true);
+              Meteor.call('/songs/currentlyPlaying', next);
+              if (next.source == 'youtube') {
+                player.loadVideoById(next.videoID, 0, "default");
+                player.playVideo();
+              } else {
+                sound.pause();
+                playSoundcloud(next.videoID);
+              }
+            }
+        });
+      }
+    }
+
+    function playPauseClick(){
+      var button = document.getElementById("playPauseButton");
+        if(button.value == "Pause"){
+          button.value = "Play";
+          if ("{{source}}".trim() == 'youtube')
+            player.pauseVideo();
+          else
+            sound.pause();
+        }
+        else{
+        button.value = "Pause";
+        if ("{{source}}".trim() == 'youtube')
+          player.playVideo()
+        else
+          sound.play();
+      }
+
+    }
+    function playSoundcloud(vid) {
+      SC.initialize({
+        client_id: 'ee340a5bed9ea7336003102356efeaa9'
+      });
+      if (vid) {
+        SC.stream('/tracks/' + vid).then(function(obj){
+        obj.play();
+        obj.on(
+          'finish',
+          function() {
+            var channelId = FlowRouter.getParam('id');
+            var song = Song.getLatest(channelId).fetch()[0];
+            var next = Template.channel.__helpers[" nextS"]();
+            
+            var hist = new History();
+            hist.set("title", song.title);
+            hist.set("videoID", song.videoID);
+            hist.set("thumbnail", song.thumbnail);
+            hist.set("source", song.source); 
+            hist.set("channelID", song.channelID);
+            
+            Meteor.call('/history/new', hist, function(err, res){});
+            Meteor.call('/song/remove', Song.getLatest(channelId).fetch()[0], function(err, res) { 
+              if (err) {}
+              if (next != null) {
+                next.set("currentlyPlaying", true);
+                Meteor.call('/songs/currentlyPlaying', next);
+                if (next.source == 'youtube') {
+                  if (player != null) {
+                    player.loadVideoById(next.videoID, 0, "default");
+                    player.playVideo();
+                  }
+                } else {
+                  sound.pause();
+                  playSoundcloud(next.videoID);
+                }
+              }
+            });
+          }
+        );
+        sound = obj;
+      });
+      } else {
+        SC.stream('/tracks/{{videoId}}').then(function(obj){
+          obj.play();
+          obj.on(
+            'finish',
+            function() {
+              var channelId = FlowRouter.getParam('id');
+              var song = Song.getLatest(channelId).fetch()[0];
+              var next = Template.channel.__helpers[" nextS"]();
+              
+              var hist = new History();
+              hist.set("title", song.title);
+              hist.set("videoID", song.videoID);
+              hist.set("thumbnail", song.thumbnail);
+              hist.set("source", song.source); 
+              hist.set("channelID", song.channelID);
+              
+              Meteor.call('/history/new', hist, function(err, res){});
+              Meteor.call('/song/remove', next, function(err, res) { 
+                if (err) {}
+                if (next != null) {
+                  next.set("currentlyPlaying", true);
+                  Meteor.call('/songs/currentlyPlaying', next);
+                  if (next.source == 'youtube') {
+                    if (player!= null) {
+                      player.loadVideoById(next.videoID, 0, "default");
+                      player.playVideo();
+                    }
+                  } else {
+                    sound.pause();
+                    playSoundcloud(next.videoID);
+                  }
+                }
+              });
+            }
+          );
+          sound = obj;
+        });
+      }
+    }
+  </script>
+
+  {{#if isYoutube source}}
+
   <script>
+
+  document.getElementById("player").hidden = false;
     var tag = document.createElement('script');
   
     tag.src = "https://www.youtube.com/iframe_api";
@@ -189,41 +341,26 @@
       event.target.playVideo();
     }
 
-    function onPlayerStateChange(event) {
-      if (event.data == YT.PlayerState.ENDED) {
-        var channelId = FlowRouter.getParam('id');
-        var song = Song.getLatest(channelId).fetch()[0];
-      
-        var hist = new History();
-        hist.set("title", song.title);
-        hist.set("videoID", song.videoID);
-        hist.set("thumbnail", song.thumbnail);
-        hist.set("source", song.source); 
-        hist.set("channelID", song.channelID);
-  
-        Meteor.call('/history/new', hist, function(err, res){});
-        Meteor.call('/song/remove', Song.getLatest(channelId).fetch()[0], function(err, res) { 
-          if (err) {}
-            if (Song.getLatest(channelId).fetch()[0]) {
-              player.loadVideoById(Song.getLatest(channelId).fetch()[0].videoID, 0, "default");
-              player.playVideo();
-            }
-        });
-      }
-    }
-
-    function playPauseClick(){
-      var button = document.getElementById("playPauseButton");
-        if(button.value == "Pause"){
-          button.value = "Play";
-          player.pauseVideo();
-        }
-        else{
-        button.value = "Pause";
-        player.playVideo()
-      }
-
-    }
-
   </script>
+  {{else}}
+  <script type="text/javascript">
+      document.getElementById("player").hidden = true;
+      var tag = document.createElement('script');
+      tag.src = "https://connect.soundcloud.com/sdk/sdk-3.0.0.js";
+      tag.type = 'text/javascript';
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      tag.onload = function() {
+        SC.initialize({
+          client_id: 'ee340a5bed9ea7336003102356efeaa9'
+        });
+        {{#unless isYoutube source}}
+        playSoundcloud();
+        {{/unless}}
+      }
+    
+  </script>
+  {{/if}}
+  <!--{{> myButtons}}-->
 </template>
+
