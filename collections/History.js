@@ -52,8 +52,8 @@ History.getLatest = function(channelID) {
   return History.find({
     channelID: channelID
   }, {
-    sort: {createdAt: 1}, 
-    limit: 1
+    sort: {createdAt: -1}, 
+    limit: 5
   });
 }
 

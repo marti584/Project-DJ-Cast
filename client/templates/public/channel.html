@@ -4,7 +4,7 @@
       <section>
         <div class="headleft">
           <h1 class="roomtitle">{{title}}</h1>
-          <h4 class="roomdesc">{{query}} </h4>
+          <h4 class="roomdesc">{{query}}</h4>
           <div class="upnext">
             {{#with nextS}}
               <h3 class="upnextsongname">Up next.. {{title}}</h3>
@@ -21,7 +21,9 @@
 <a href="https://twitter.com/share" class="twitter-share-button" data-text="I am listening to {{title}} on #djcast_" data-via="djcast_">Tweet</a>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
                     </p>
+          {{> suggestionModal}}<p></p>
           {{> qrCode }}
+          {{> sourceSelect}}
 
         </div>
       </section>
@@ -49,6 +51,13 @@
 
 </template>
 
+<template name="sourceSelect">
+  <select id="src">
+    <option value="youtube">Youtube</option>
+    <option value="soundcloud">SoundCloud</option>
+  </select>
+</template>
+
 <template name="qrCode">
   <button type="button" class="socialbutton">QR</button>
     <div class="showQr" hidden = "true;">
@@ -68,10 +77,36 @@
         <div class="col-md-11">
           <h4 class="list-group-item-heading">{{snippet.title}}</h4>
         </div>
+        </a>
+    {{/each}}
+    </div>
+</template>
+
+<template name="suggestionModal">
+<button type="button" id="largeCreate" class="suggestionButton" data-toggle="modal" data-target="#myModal2">Suggestions</button>
+<!-- Modal -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Suggested Songs
+
+        </h4>
       </div>
-      </a>
-  {{/each}}
+      <div class="modal-body" id="modal">
+        <form>
+          
+        </form>
+        
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
   </div>
+</div>
+
 </template>
 
 <template name="Moderator">
@@ -79,7 +114,7 @@
   <br>
   <span style="display: inline;">
     <input id="playPauseButton" class="playskip" type="button" value="Pause" OnClick="playPauseClick()"/>
-    <input id="skipButton" class="playskip" type="button" value="Skip" OnClick="skipClick()"/>
+    <input id="skipButton" class="playskip" type="button" value="Skip"/>
   </span>
 
   <script>
@@ -116,6 +151,16 @@
     function onPlayerStateChange(event) {
       if (event.data == YT.PlayerState.ENDED) {
         var channelId = FlowRouter.getParam('id');
+        var song = Song.getLatest(channelId).fetch()[0];
+      
+        var hist = new History();
+        hist.set("title", song.title);
+        hist.set("videoID", song.videoID);
+        hist.set("thumbnail", song.thumbnail);
+        hist.set("source", song.source); 
+        hist.set("channelID", song.channelID);
+  
+        Meteor.call('/history/new', hist, function(err, res){});
         Meteor.call('/song/remove', Song.getLatest(channelId).fetch()[0], function(err, res) { 
           if (err) {}
             if (Song.getLatest(channelId).fetch()[0]) {
@@ -138,8 +183,6 @@
       }
 
     }
-
-
 
   </script>
 </template>
