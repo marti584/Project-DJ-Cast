@@ -47,6 +47,13 @@ body{
       
 }
 
+button.socialbutton{
+    float: right;
+    width: 61px;
+    height: 22px;
+    margin-top: -11px;
+}
+
 div.player {
     width: 600px;
     margin: 0 auto;
@@ -78,11 +85,11 @@ div.upnext {
 
 div.showQr {
     background-color: white;
-    margin: auto auto;
     text-align: center;
     width: 300px;
     height: 300px;
     padding-top: 22px;
+    position: absolute;
 }
 
 btn-o{
@@ -196,6 +203,9 @@ img.control{
 div.historyQueue{
     margin: 0 auto;
     text-align: center;
+    height: 120px;
+    overflow: hidden;
+
 }
 
 .btn-info {
@@ -206,14 +216,19 @@ div.historyQueue{
 }
 
 .list-group{
-    padding-top: 25px;
-    padding-left: 50px;
+    margin-top: 25px;
+    margin-left: 50px;
     position: absolute;
+    overflow-y: scroll;
+    max-height: 80%;
+    border-radius: 8px;
+    border: 1px solid #ddd;
 }
 
 a.list-group-item{
     width: 400px;
     background-color: rgba(0,0,0,.8);
+    
 
 }
 

@@ -15,8 +15,13 @@
 
          <div class="headright">
           {{> searchBox}}<p></p>
-                    {{> suggestionModal}}<p></p>
-                    <p><br><a href="https://twitter.com/share" class="twitter-share-button" data-text="Listening to {{title}} on DJ-Cast" data-via="djcast_">Tweet</a></p>
+                    <p><br>
+
+
+<a href="https://twitter.com/share" class="twitter-share-button" data-text="I am listening to {{title}} on #djcast_" data-via="djcast_">Tweet</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+                    </p>
+          {{> suggestionModal}}<p></p>
           {{> qrCode }}
           {{> sourceSelect}}
 
@@ -43,22 +48,24 @@
     </div>
 
   <div class="queue-group">
-  <h3 class="queue-head">Upcoming Songs</h3>
-  {{#each getQueue}}
-    <a href="#" class="queue-group-item">
-    <div class="row" style="margin-bottom: 10px;">
-      <div class="col-md-7">
-        <h4 class="queue-group-item-heading">{{votes}} {{title}}</h4>
-      </div>
-      <div class="col-md-5">
-        <span>
-          <input id="downvoteButton" type="button" value="Downvote" style="width: 100px;"/>
-          <input id="upvoteButton" type="button" value="Upvote" style="width: 100px;"/>
-        </span>
-      </div>
-    </div>
-    </a>
-  {{/each}}
+    {{#if getQueue}}
+      <h3 class="queue-head">Upcoming Songs</h3>
+      {{#each getQueue}}
+        <a href="#" class="queue-group-item">
+        <div class="row" style="margin-bottom: 10px;">
+          <div class="col-md-7">
+            <h4 class="queue-group-item-heading">{{votes}} {{title}}</h4>
+          </div>
+          <div class="col-md-5">
+            <span>
+              <input id="downvoteButton" type="button" value="Downvote" style="width: 100px;"/>
+              <input id="upvoteButton" type="button" value="Upvote" style="width: 100px;"/>
+            </span>
+          </div>
+        </div>
+        </a>
+    {{/each}}
+  {{/if}}
   </div>
 
   </div>
@@ -74,25 +81,25 @@
 </template>
 
 <template name="qrCode">
-  <button type="button">QR</button>
-    <div class="showQr" style = "display:false;">
+  <button type="button" class="socialbutton">QR</button>
+    <div class="showQr" hidden = "true;">
       {{> QrCode text=getCurrentUrl }}
     </div>
 </template> 
 
 <template name="searchBox">
-  <input type="text" class="search" id="search-box" placeholder="search here">
-    <div class="list-group">
-    {{#each getSearchResults}}
-        <a href="#" class="list-group-item">
-        <div class="row">
-          <div class="col-md-1">
-            <img src="{{snippet.thumbnails.default.url}}" class="img-responsive"/>
-          </div>
-          <div class="col-md-11">
-            <h4 class="list-group-item-heading">{{snippet.title}}</h4>
-          </div>
+  <input type="text" class="search" id="search-box" placeholder="search youtube here">
+  <div class="list-group" hidden = "true;">
+  {{#each getSearchResults}}
+      <a href="#" class="list-group-item">
+      <div class="row">
+        <div class="col-md-1">
+          <img src="{{snippet.thumbnails.default.url}}" class="img-responsive"/>
         </div>
+        <div class="col-md-11">
+          <h4 class="list-group-item-heading">{{snippet.title}}</h4>
+        </div>
+      </div>
         </a>
     {{/each}}
     </div>
@@ -122,6 +129,7 @@
     </div>
   </div>
 </div>
+
 </template>
 
 <template name="Moderator">
@@ -198,15 +206,6 @@
       }
 
     }
-
-    !function(d,s,id){
-      var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';
-      if(!d.getElementById(id)){
-        js=d.createElement(s);
-        js.id=id;js.src=p+'://platform.twitter.com/widgets.js';
-        fjs.parentNode.insertBefore(js,fjs);
-      }
-    }(document, 'script', 'twitter-wjs');
 
   </script>
 </template>

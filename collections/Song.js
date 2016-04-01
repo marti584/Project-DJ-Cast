@@ -74,8 +74,10 @@ Song.getChannelList = function(channelID) {
   });
 }
 
-Song.getQueue = function(channelID) {
+Song.getQueue = function(channelID, currentSongID) {
+  console.log(currentSongID);
   return Song.find({
+    _id: { $ne: currentSongID },
     channelID: channelID
   }, {
     sort: {votes: -1}

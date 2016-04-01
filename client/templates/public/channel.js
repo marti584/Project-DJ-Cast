@@ -35,12 +35,15 @@ Template.channel.helpers({
 
   getQueue: function() {
     var channelId = FlowRouter.getParam('id');
-    return Song.getQueue(channelId);
+    var currentSong = Song.getLatest(channelId).fetch()[0];
+    console.log(currentSong);
+    return Song.getQueue(channelId, currentSong._id).fetch();
   },
 
   nextS: function() {
     var channelId = FlowRouter.getParam('id');
-    return Song.getChannelList(channelId).fetch()[1];
+    var currentSong = Song.getLatest(channelId).fetch()[0];
+    return Song.getQueue(channelId, currentSong._id).fetch()[0];
   }
 
 });
@@ -74,6 +77,7 @@ Template.searchBox.onCreated(function() {
 Template.searchBox.events({
   "keyup #search-box": _.throttle(function(e, template) {
     var text = $(e.target).val().trim();
+    document.getElementsByClassName('list-group')[0].hidden = false;
     self.urls = new ReactiveVar([]);
     Meteor.call('/youtube/searchForMusic', text, 12, function(err, res) {
       if (err) {
@@ -81,6 +85,9 @@ Template.searchBox.events({
       }
       template.urls.set(res.items);
     });
+    
+    
+
   }, 1000),
   "click .list-group-item": function (e, template) {
     var newsong = new Song();
@@ -91,10 +98,11 @@ Template.searchBox.events({
     newsong.set("channelID", FlowRouter.getParam('id'));
     newsong.set("votes", 1);
 
+    document.getElementsByClassName('list-group')[0].hidden = true;
+    document.getElementsByClassName('search')[0].placeholder = 'search youtube here';
     Meteor.call('/youtube/new', newsong, function(err, res) { 
 
     } );
-
   }
 });
 
@@ -123,7 +131,8 @@ Template.Moderator.helpers({
   },
   nextSong: function() {
     var channelId = FlowRouter.getParam('id');
-    return Song.getChannelList(channelId).fetch()[1].videoID;
+    var currentSong = Song.getLatest(channelId).fetch()[0];
+    return Song.getQueue(channelId, currentSong._id).fetch()[0];
   }
 });
 
@@ -142,7 +151,7 @@ Template.Moderator.events({
       
       
       Meteor.call('/history/new', hist, function(err, res){});
-      Meteor.call('/song/remove', Song.getLatest(channelId).fetch()[0], function(err, res) { 
+      Meteor.call('/song/remove', song, function(err, res) { 
         if (err) {}
           if (Song.getLatest(channelId).fetch()[0]) {
             player.loadVideoById(Song.getLatest(channelId).fetch()[0].videoID, 0, "default");
