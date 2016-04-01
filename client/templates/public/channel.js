@@ -87,6 +87,12 @@ Template.channel.events({
 
       } );
     }
+    if (e.target.id == "removeNow") {
+      var song = Song.find({_id: this._id}).fetch()[0];
+      Meteor.call('/song/remove', song, function(err, res) { 
+        
+      } );
+    }
   }
 })
 
