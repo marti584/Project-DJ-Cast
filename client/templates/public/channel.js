@@ -115,7 +115,7 @@ Template.searchBox.events({
     newsong.set("votes", 1);
 
     document.getElementsByClassName('list-group')[0].hidden = true;   
-    document.getElementsByClassName('search')[0].placeholder = 'search youtube here';
+    document.getElementsByClassName('search')[0].value = '';
     Meteor.call('/youtube/new', newsong, function(err, res) { 
 
     } );
