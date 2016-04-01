@@ -76,9 +76,14 @@ Template.channel.events({
       } );
     }
     if (e.target.id == "downvoteButton") {
-      console.log("downvote");
       var song = Song.find({_id: this._id}).fetch()[0];
       Meteor.call('/songs/downvote', song, function(err, res) { 
+
+      } );
+    }
+    if (e.target.id == "playNow") {
+      var song = Song.find({_id: this._id}).fetch()[0];
+      Meteor.call('/songs/playnow', song, function(err, res) { 
 
       } );
     }
