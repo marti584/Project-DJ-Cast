@@ -36,7 +36,7 @@
       {{#with currentSong}}
         <div class="player">
           {{#if isModerator}}
-            {{> Moderator videoId=videoID }}
+            {{> Moderator videoId=videoID source=source thumbnail=thumbnail}}
           {{else}}
             <img src="{{thumbnail}}" class="playerimg">
           {{/if}}
@@ -77,10 +77,18 @@
       <a href="#" class="list-group-item">
       <div class="row">
         <div class="col-md-1">
+          {{#if isYoutube}}
           <img src="{{snippet.thumbnails.default.url}}" class="img-responsive"/>
+          {{else}}
+          <img src="{{artwork_url}}" class="img-responsive"/>
+          {{/if}}
         </div>
         <div class="col-md-11">
+          {{#if isYoutube}}
           <h4 class="list-group-item-heading">{{snippet.title}}</h4>
+          {{else}}
+          <h4 class="list-group-item-heading">{{title}}</h4>
+          {{/if}}
         </div>
       </div>
         </a>
@@ -123,7 +131,133 @@
     <input id="skipButton" class="playskip" type="button" value="Skip"/>
   </span>
 
+  <script type="text/javascript" src="https://connect.soundcloud.com/sdk/sdk-3.0.0.js">
+  
+  </script>
+
+  <script type="text/javascript">
+    function onPlayerStateChange(event) {
+      if (event.data == YT.PlayerState.ENDED) {
+        var channelId = FlowRouter.getParam('id');
+        var song = Song.getLatest(channelId).fetch()[0];
+      
+        var hist = new History();
+        hist.set("title", song.title);
+        hist.set("videoID", song.videoID);
+        hist.set("thumbnail", song.thumbnail);
+        hist.set("source", song.source); 
+        hist.set("channelID", song.channelID);
+  
+        Meteor.call('/history/new', hist, function(err, res){});
+        Meteor.call('/song/remove', Song.getLatest(channelId).fetch()[0], function(err, res) { 
+          if (err) {}
+            if (Song.getLatest(channelId).fetch()[0]) {
+              if (Song.getLatest(channelId).fetch()[0].source == 'youtube') {
+                player.loadVideoById(Song.getLatest(channelId).fetch()[0].videoID, 0, "default");
+                player.playVideo();
+              } else {
+                sound.pause();
+                playSoundcloud();
+              }
+            }
+        });
+      }
+    }
+
+    function playPauseClick(){
+      var button = document.getElementById("playPauseButton");
+        if(button.value == "Pause"){
+          button.value = "Play";
+          if ('{{source}}' == 'youtube')
+            player.pauseVideo();
+          else
+            sound.pause();
+        }
+        else{
+        button.value = "Pause";
+        if ('{{source}}' == 'youtube')
+          player.playVideo()
+        else
+          sound.play();
+      }
+
+    }
+    function playSoundcloud(vid) {
+      if (vid) {
+        SC.stream('/tracks/' + vid).then(function(player){
+        player.play();
+        player.on(
+          'finish',
+          function() {
+            var channelId = FlowRouter.getParam('id');
+            var song = Song.getLatest(channelId).fetch()[0];
+            
+            var hist = new History();
+            hist.set("title", song.title);
+            hist.set("videoID", song.videoID);
+            hist.set("thumbnail", song.thumbnail);
+            hist.set("source", song.source); 
+            hist.set("channelID", song.channelID);
+            
+            Meteor.call('/history/new', hist, function(err, res){});
+            Meteor.call('/song/remove', Song.getLatest(channelId).fetch()[0], function(err, res) { 
+              if (err) {}
+              if (Song.getLatest(channelId).fetch()[0]) {
+                if (Song.getLatest(channelId).fetch()[0].source == 'youtube') {
+                  player.loadVideoById(Song.getLatest(channelId).fetch()[0].videoID, 0, "default");
+                  player.playVideo();
+                } else {
+                  player.pause();
+                  playSoundcloud(Song.getLatest(channelId).fetch()[0].videoID);
+                }
+              }
+            });
+          }
+        );
+        sound = player;
+      });
+      } else {
+        SC.stream('/tracks/{{videoId}}').then(function(player){
+          player.play();
+          player.on(
+            'finish',
+            function() {
+              var channelId = FlowRouter.getParam('id');
+              var song = Song.getLatest(channelId).fetch()[0];
+              
+              var hist = new History();
+              hist.set("title", song.title);
+              hist.set("videoID", song.videoID);
+              hist.set("thumbnail", song.thumbnail);
+              hist.set("source", song.source); 
+              hist.set("channelID", song.channelID);
+              
+              Meteor.call('/history/new', hist, function(err, res){});
+              Meteor.call('/song/remove', Song.getLatest(channelId).fetch()[0], function(err, res) { 
+                if (err) {}
+                if (Song.getLatest(channelId).fetch()[0]) {
+                  if (Song.getLatest(channelId).fetch()[0].source == 'youtube') {
+                    player.loadVideoById(Song.getLatest(channelId).fetch()[0].videoID, 0, "default");
+                    player.playVideo();
+                  } else {
+                    player.pause();
+                    playSoundcloud(Song.getLatest(channelId).fetch()[0].videoID);
+                  }
+                }
+              });
+            }
+          );
+          sound = player;
+        });
+      }
+    }
+  </script>
+
+  {{#if isYoutube source}}
+
   <script>
+
+  document.getElementById("player").hidden = false;
     var tag = document.createElement('script');
   
     tag.src = "https://www.youtube.com/iframe_api";
@@ -154,59 +288,29 @@
       event.target.playVideo();
     }
 
-    function onPlayerStateChange(event) {
-      if (event.data == YT.PlayerState.ENDED) {
-        var channelId = FlowRouter.getParam('id');
-        var song = Song.getLatest(channelId).fetch()[0];
-      
-        var hist = new History();
-        hist.set("title", song.title);
-        hist.set("videoID", song.videoID);
-        hist.set("thumbnail", song.thumbnail);
-        hist.set("source", song.source); 
-        hist.set("channelID", song.channelID);
-  
-        Meteor.call('/history/new', hist, function(err, res){});
-        Meteor.call('/song/remove', Song.getLatest(channelId).fetch()[0], function(err, res) { 
-          if (err) {}
-            if (Song.getLatest(channelId).fetch()[0]) {
-              player.loadVideoById(Song.getLatest(channelId).fetch()[0].videoID, 0, "default");
-              player.playVideo();
-            }
-        });
-      }
-    }
-
-    function playPauseClick(){
-      var button = document.getElementById("playPauseButton");
-        if(button.value == "Pause"){
-          button.value = "Play";
-          player.pauseVideo();
-        }
-        else{
-        button.value = "Pause";
-        player.playVideo()
-      }
-
-    }
-
   </script>
+  {{else}}
+  <script type="text/javascript">
+    document.getElementById("player").hidden = true;
 
-<script src="https://connect.soundcloud.com/sdk/sdk-3.0.0.js"></script>
-<script>
-SC.initialize({
-  client_id: 'ee340a5bed9ea7336003102356efeaa9'
-});
+    var tag = document.createElement('script');
+    tag.src = "https://connect.soundcloud.com/sdk/sdk-3.0.0.js";
+    tag.type = 'text/javascript';
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
-// find all sounds of buskers licensed under 'creative commons share alike'
-SC.get('/tracks', {
-  q: 'buskers', license: 'cc-by-sa'
-}).then(function(tracks) {
-  console.log(tracks);
-});
-</script>
+    var sound;
+    tag.onload = function() {
+      SC.initialize({
+        client_id: 'ee340a5bed9ea7336003102356efeaa9'
+      });
 
 
+      playSoundcloud();
+    }
+  </script>
+  <img src="{{thumbnail}}" class="playerimg">
+  {{/if}}
 
   <!--{{> myButtons}}-->
 </template>
