@@ -32,13 +32,24 @@ Song = Astronomy.createClass({
     source: {
       validator: [
         Validators.required(),
-        Validators.string(),
+        Validators.string()
       ]
     },
     channelID: {
       validator: [
         Validators.required(),
         Validators.string()
+      ]
+    }, 
+    votes: {
+      validator: [
+        Validators.required(),
+        Validators.number()
+      ]
+    }, 
+    currentlyPlaying: {
+      validator: [
+        Validators.boolean()
       ]
     }
   },
@@ -54,11 +65,10 @@ Song = Astronomy.createClass({
  * @return {Mongo.Cursor} the resulting Mongo cursor from find()
  */
 Song.getLatest = function(channelID) {
-
   return Song.find({
     channelID: channelID
   }, {
-    sort: {createdAt: 1}, 
+    sort: {currentlyPlaying: -1}, 
     limit: 1
   });
 }
@@ -66,5 +76,14 @@ Song.getLatest = function(channelID) {
 Song.getChannelList = function(channelID) {
   return Song.find({
     channelID: channelID
+  });
+}
+
+Song.getQueue = function(channelID, currentSongID) {
+  return Song.find({
+    _id: { $ne: currentSongID },
+    channelID: channelID
+  }, {
+    sort: {votes: -1, createdAt: 1}
   });
 }

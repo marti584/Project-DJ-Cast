@@ -1,12 +1,21 @@
 <template name="channel">
     {{#with channel}}
     <div class=playerbody>
-      {{#if isModerator}}
-      <button id="CloseRoom" type="button" class="btn btn-default">Close Room</button>
-      {{/if}}
+ 
       <section>
         <div class="headleft">
-          <h1 class="roomtitle">{{title}}</h1>
+          <h1 class="roomtitle">{{title}}       
+
+
+
+<a href="https://twitter.com/share" class="twitter-share-button" data-text="I am listening to {{title}} on #djcast_" data-via="djcast_"></a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+              
+          {{#if isModerator}}
+            {{> qrCode }}
+          {{/if}}
+
+          </h1>
           <h4 class="roomdesc">{{query}}</h4>
           <div class="upnext">
             {{#with nextS}}
@@ -17,17 +26,8 @@
         </div>
 
          <div class="headright">
-          {{> searchBox}}<p></p>
-                    <p><br>
+          {{> searchBox}}{{> suggestionModal}}<br>
 
-
-<a href="https://twitter.com/share" class="twitter-share-button" data-text="I am listening to {{title}} on #djcast_" data-via="djcast_">Tweet</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
-                    </p>
-          {{> suggestionModal}}<p></p>
-          {{#if isModerator}}
-            {{> qrCode }}
-          {{/if}}
           {{> sourceSelect}}
 
         </div>
@@ -50,21 +50,49 @@
       {{#each getRecent}}
         <img src="{{thumbnail}}" class="historyQ">
       {{/each}}
-    </div> 
+    </div>
+
+  <div class="queue-group">
+    {{#if getQueue}}
+      <h3 class="queue-head">Upcoming Songs</h3>
+      {{#each getQueue}}
+        <a href="#" class="queue-group-item">
+        <div class="row" style="margin-bottom: 10px;">
+          <div class="col-md-7">
+            <h4 class="queue-group-item-heading">{{votes}} {{title}}</h4>
+          </div>
+          <div class="col-md-5">
+            <span>
+              {{#if isModerator}}
+                <input id="removeNow" type="button" value="Remove" style="width: 50px;"/>
+              {{/if}}
+              <input id="downvoteButton" type="button" value="Downvote" style="width: 100px;"/>
+              <input id="upvoteButton" type="button" value="Upvote" style="width: 100px;"/>
+              {{#if isModerator}}
+                <input id="playNow" type="button" value="Play" style="width: 50px;"/>
+              {{/if}}
+            </span>
+          </div>
+        </div>
+        </a>
+    {{/each}}
+  {{/if}}
+  </div>
+
   </div>
 	{{/with}}
 
 </template>
 
 <template name="sourceSelect">
-  <select id="src">
-    <option value="youtube">Youtube</option>
+  <select id="src" class="dropdown" style="margin-top: 15px;">
+    <option value="youtube">Source: YouTube</option>
     <option value="soundcloud">SoundCloud</option>
   </select>
 </template>
 
 <template name="qrCode">
-  <button type="button" class="socialbutton">QR</button>
+  <button type="button" class="socialbutton">QR Code</button>
     <div class="showQr" hidden = "true;">
       {{> QrCode text=getCurrentUrl }}
     </div>
@@ -97,7 +125,7 @@
 </template>
 
 <template name="suggestionModal">
-<button type="button" id="largeCreate" class="suggestionButton" data-toggle="modal" data-target="#myModal2">Suggestions</button>
+<button type="button" id="largeCreate" class="suggestionButton" data-toggle="modal" data-target="#myModal2">Song Suggestions</button>
 <!-- Modal -->
 <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
@@ -109,11 +137,17 @@
 
         </h4>
       </div>
-      <div class="modal-body" id="modal">
-        <form>
-          
-        </form>
-        
+      <div class="modal-body" id="modal">        
+        <label for="recommendations" id="reco">No suggestions yet..</label>
+        <br>
+        <label for="recommendations" id="reco2"></label>
+        <br>
+        <label for="recommendations" id="reco3"></label>
+        <br>
+        <label for="recommendations" id="reco4"></label>
+        <br>
+        <label for="recommendations" id="reco5"></label>
+        <br>        
       </div>
       <div class="modal-footer">
       </div>
@@ -125,10 +159,12 @@
 
 <template name="Moderator">
   <div id="player"></div>
+  {{#unless isYoutube source}}<img src="{{thumbnail}}" class="playerimg" style="width: 480px; height: 480px;">{{/unless}}
   <br>
-  <span style="display: inline;">
-    <input id="playPauseButton" class="playskip" type="button" value="Pause" OnClick="playPauseClick()"/>
+  <span>
+    <input id="playPauseButton" class="playskip" type="button" value="Pause"/>
     <input id="skipButton" class="playskip" type="button" value="Skip"/>
+    <input id="CloseRoom" type="button" class="playskip" value="Close Room">
   </span>
 
   <script type="text/javascript" src="https://connect.soundcloud.com/sdk/sdk-3.0.0.js">
@@ -136,10 +172,12 @@
   </script>
 
   <script type="text/javascript">
+    var sound;
     function onPlayerStateChange(event) {
       if (event.data == YT.PlayerState.ENDED) {
         var channelId = FlowRouter.getParam('id');
         var song = Song.getLatest(channelId).fetch()[0];
+        var next = Template.channel.__helpers[" nextS"]();
       
         var hist = new History();
         hist.set("title", song.title);
@@ -151,13 +189,15 @@
         Meteor.call('/history/new', hist, function(err, res){});
         Meteor.call('/song/remove', Song.getLatest(channelId).fetch()[0], function(err, res) { 
           if (err) {}
-            if (Song.getLatest(channelId).fetch()[0]) {
-              if (Song.getLatest(channelId).fetch()[0].source == 'youtube') {
-                player.loadVideoById(Song.getLatest(channelId).fetch()[0].videoID, 0, "default");
+            if (next != null) {
+              next.set("currentlyPlaying", true);
+              Meteor.call('/songs/currentlyPlaying', next);
+              if (next.source == 'youtube') {
+                player.loadVideoById(next.videoID, 0, "default");
                 player.playVideo();
               } else {
                 sound.pause();
-                playSoundcloud();
+                playSoundcloud(next.videoID);
               }
             }
         });
@@ -168,14 +208,14 @@
       var button = document.getElementById("playPauseButton");
         if(button.value == "Pause"){
           button.value = "Play";
-          if ('{{source}}' == 'youtube')
+          if ("{{source}}".trim() == 'youtube')
             player.pauseVideo();
           else
             sound.pause();
         }
         else{
         button.value = "Pause";
-        if ('{{source}}' == 'youtube')
+        if ("{{source}}".trim() == 'youtube')
           player.playVideo()
         else
           sound.play();
@@ -183,14 +223,18 @@
 
     }
     function playSoundcloud(vid) {
+      SC.initialize({
+        client_id: 'ee340a5bed9ea7336003102356efeaa9'
+      });
       if (vid) {
-        SC.stream('/tracks/' + vid).then(function(player){
-        player.play();
-        player.on(
+        SC.stream('/tracks/' + vid).then(function(obj){
+        obj.play();
+        obj.on(
           'finish',
           function() {
             var channelId = FlowRouter.getParam('id');
             var song = Song.getLatest(channelId).fetch()[0];
+            var next = Template.channel.__helpers[" nextS"]();
             
             var hist = new History();
             hist.set("title", song.title);
@@ -202,28 +246,33 @@
             Meteor.call('/history/new', hist, function(err, res){});
             Meteor.call('/song/remove', Song.getLatest(channelId).fetch()[0], function(err, res) { 
               if (err) {}
-              if (Song.getLatest(channelId).fetch()[0]) {
-                if (Song.getLatest(channelId).fetch()[0].source == 'youtube') {
-                  player.loadVideoById(Song.getLatest(channelId).fetch()[0].videoID, 0, "default");
-                  player.playVideo();
+              if (next != null) {
+                next.set("currentlyPlaying", true);
+                Meteor.call('/songs/currentlyPlaying', next);
+                if (next.source == 'youtube') {
+                  if (player != null) {
+                    player.loadVideoById(next.videoID, 0, "default");
+                    player.playVideo();
+                  }
                 } else {
-                  player.pause();
-                  playSoundcloud(Song.getLatest(channelId).fetch()[0].videoID);
+                  sound.pause();
+                  playSoundcloud(next.videoID);
                 }
               }
             });
           }
         );
-        sound = player;
+        sound = obj;
       });
       } else {
-        SC.stream('/tracks/{{videoId}}').then(function(player){
-          player.play();
-          player.on(
+        SC.stream('/tracks/{{videoId}}').then(function(obj){
+          obj.play();
+          obj.on(
             'finish',
             function() {
               var channelId = FlowRouter.getParam('id');
               var song = Song.getLatest(channelId).fetch()[0];
+              var next = Template.channel.__helpers[" nextS"]();
               
               var hist = new History();
               hist.set("title", song.title);
@@ -233,21 +282,25 @@
               hist.set("channelID", song.channelID);
               
               Meteor.call('/history/new', hist, function(err, res){});
-              Meteor.call('/song/remove', Song.getLatest(channelId).fetch()[0], function(err, res) { 
+              Meteor.call('/song/remove', next, function(err, res) { 
                 if (err) {}
-                if (Song.getLatest(channelId).fetch()[0]) {
-                  if (Song.getLatest(channelId).fetch()[0].source == 'youtube') {
-                    player.loadVideoById(Song.getLatest(channelId).fetch()[0].videoID, 0, "default");
-                    player.playVideo();
+                if (next != null) {
+                  next.set("currentlyPlaying", true);
+                  Meteor.call('/songs/currentlyPlaying', next);
+                  if (next.source == 'youtube') {
+                    if (player!= null) {
+                      player.loadVideoById(next.videoID, 0, "default");
+                      player.playVideo();
+                    }
                   } else {
-                    player.pause();
-                    playSoundcloud(Song.getLatest(channelId).fetch()[0].videoID);
+                    sound.pause();
+                    playSoundcloud(next.videoID);
                   }
                 }
               });
             }
           );
-          sound = player;
+          sound = obj;
         });
       }
     }
@@ -291,26 +344,23 @@
   </script>
   {{else}}
   <script type="text/javascript">
-    document.getElementById("player").hidden = true;
-
-    var tag = document.createElement('script');
-    tag.src = "https://connect.soundcloud.com/sdk/sdk-3.0.0.js";
-    tag.type = 'text/javascript';
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-    var sound;
-    tag.onload = function() {
-      SC.initialize({
-        client_id: 'ee340a5bed9ea7336003102356efeaa9'
-      });
-
-
-      playSoundcloud();
-    }
+      document.getElementById("player").hidden = true;
+      var tag = document.createElement('script');
+      tag.src = "https://connect.soundcloud.com/sdk/sdk-3.0.0.js";
+      tag.type = 'text/javascript';
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      tag.onload = function() {
+        SC.initialize({
+          client_id: 'ee340a5bed9ea7336003102356efeaa9'
+        });
+        {{#unless isYoutube source}}
+        playSoundcloud();
+        {{/unless}}
+      }
+    
   </script>
-  <img src="{{thumbnail}}" class="playerimg">
   {{/if}}
-
   <!--{{> myButtons}}-->
 </template>
+
