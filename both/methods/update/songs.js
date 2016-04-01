@@ -27,5 +27,16 @@ Meteor.methods({
       // Send errors back to the client
       song.throwValidationException();
     }
-  }
+  },
+
+  '/songs/playnow': function(song) {
+    check(song, Song)
+
+    if(song.validate()) {
+      Song.update({ _id: song._id }, {$set: {votes: 999}});
+    } else {
+      // Send errors back to the client
+      song.throwValidationException();
+    }
+  }  
 });

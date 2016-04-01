@@ -63,8 +63,14 @@
           </div>
           <div class="col-md-5">
             <span>
+              {{#if isModerator}}
+                <input id="removeNow" type="button" value="Remove" style="width: 50px;"/>
+              {{/if}}
               <input id="downvoteButton" type="button" value="Downvote" style="width: 100px;"/>
               <input id="upvoteButton" type="button" value="Upvote" style="width: 100px;"/>
+              {{#if isModerator}}
+                <input id="playNow" type="button" value="Play" style="width: 50px;"/>
+              {{/if}}
             </span>
           </div>
         </div>
