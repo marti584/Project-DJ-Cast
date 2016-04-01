@@ -50,7 +50,29 @@
       {{#each getRecent}}
         <img src="{{thumbnail}}" class="historyQ">
       {{/each}}
-    </div> 
+    </div>
+
+  <div class="queue-group">
+    {{#if getQueue}}
+      <h3 class="queue-head">Upcoming Songs</h3>
+      {{#each getQueue}}
+        <a href="#" class="queue-group-item">
+        <div class="row" style="margin-bottom: 10px;">
+          <div class="col-md-7">
+            <h4 class="queue-group-item-heading">{{votes}} {{title}}</h4>
+          </div>
+          <div class="col-md-5">
+            <span>
+              <input id="downvoteButton" type="button" value="Downvote" style="width: 100px;"/>
+              <input id="upvoteButton" type="button" value="Upvote" style="width: 100px;"/>
+            </span>
+          </div>
+        </div>
+        </a>
+    {{/each}}
+  {{/if}}
+  </div>
+
   </div>
 	{{/with}}
 
