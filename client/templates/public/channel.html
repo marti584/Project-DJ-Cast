@@ -1,6 +1,9 @@
 <template name="channel">
     {{#with channel}}
     <div class=playerbody>
+      {{#if isModerator}}
+      <button id="CloseRoom" type="button" class="btn btn-default">Close Room</button>
+      {{/if}}
       <section>
         <div class="headleft">
           <h1 class="roomtitle">{{title}}</h1>
@@ -22,7 +25,9 @@
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
                     </p>
           {{> suggestionModal}}<p></p>
-          {{> qrCode }}
+          {{#if isModerator}}
+            {{> qrCode }}
+          {{/if}}
           {{> sourceSelect}}
 
         </div>
@@ -85,7 +90,7 @@
     <div class="showQr" hidden = "true;">
       {{> QrCode text=getCurrentUrl }}
     </div>
-</template> 
+</template>
 
 <template name="searchBox">
   <input type="text" class="search" id="search-box" placeholder="search youtube here">
@@ -99,8 +104,11 @@
         <div class="col-md-11">
           <h4 class="list-group-item-heading">{{snippet.title}}</h4>
         </div>
+
       </div>
+
         </a>
+
     {{/each}}
     </div>
 </template>
@@ -120,7 +128,7 @@
       </div>
       <div class="modal-body" id="modal">
         <form>
-          
+          <!--<label for="recommend">{{{recommendations}}}</label>-->
         </form>
         
       </div>

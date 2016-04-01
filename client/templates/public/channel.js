@@ -1,3 +1,5 @@
+var recommendationList = [];
+
 Template.channel.onCreated(function() {
   var self = this;
   self.autorun(function() {
@@ -44,8 +46,25 @@ Template.channel.helpers({
     var channelId = FlowRouter.getParam('id');
     var currentSong = Song.getLatest(channelId).fetch()[0];
     return Song.getQueue(channelId, currentSong._id).fetch()[0];
+  },
+
+  recommendations: function() {
+    console.log(recommendationList.toString());
+    return recommendationList.toString();
   }
 
+});
+
+Template.channel.events({
+  'click button': function(e, tmpl) {
+    if (e.currentTarget.id === "CloseRoom") {
+      e.stopPropagation();
+      var channel = Channel.findOne(this._id);
+      Meteor.call('/channels/end', channel, function(err, res) {
+          FlowRouter.go('/channels');
+      });
+    }
+  },
 });
 
 Template.channel.events({
@@ -85,9 +104,6 @@ Template.searchBox.events({
       }
       template.urls.set(res.items);
     });
-    
-    
-
   }, 1000),
   "click .list-group-item": function (e, template) {
     var newsong = new Song();
@@ -98,11 +114,12 @@ Template.searchBox.events({
     newsong.set("channelID", FlowRouter.getParam('id'));
     newsong.set("votes", 1);
 
-    document.getElementsByClassName('list-group')[0].hidden = true;
+    document.getElementsByClassName('list-group')[0].hidden = true;   
     document.getElementsByClassName('search')[0].placeholder = 'search youtube here';
     Meteor.call('/youtube/new', newsong, function(err, res) { 
 
     } );
+
   }
 });
 
@@ -269,8 +286,12 @@ Template.Moderator.events({
 
 			console.log("Recommend:");
 			for(k = 0; k < recommendations.length; k++){
+        recommendationList[k] = recommendations[k];
 				console.log(recommendations[k]);
 			}
+
+
+
 
 
     }
