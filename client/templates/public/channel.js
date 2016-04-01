@@ -69,6 +69,7 @@ Template.searchBox.onCreated(function() {
 Template.searchBox.events({
   "keyup #search-box": _.throttle(function(e, template) {
     var text = $(e.target).val().trim();
+    document.getElementsByClassName('list-group')[0].hidden = false;
     self.urls = new ReactiveVar([]);
     Meteor.call('/youtube/searchForMusic', text, 12, function(err, res) {
       if (err) {
@@ -85,6 +86,8 @@ Template.searchBox.events({
     newsong.set("source", this.id.kind); 
     newsong.set("channelID", FlowRouter.getParam('id'));
 
+    document.getElementsByClassName('list-group')[0].hidden = true;   
+    document.getElementsByClassName('search')[0].placeholder = 'search youtube here';
     Meteor.call('/youtube/new', newsong, function(err, res) { 
 
     } );
