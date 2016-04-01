@@ -94,8 +94,7 @@ Template.searchBox.helpers({
 
 Template.suggestionModal.helpers({
   recommendMe: function() {
-    console.log("hi");
-    console.log(recommendList.toString());
+    
     return recommendList.toString();
   }
 });
@@ -250,10 +249,10 @@ Template.Moderator.events({
 				});
 			}
 
-			console.log("Recommend:");
+			//console.log("Recommend:");
 			for(k = 0; k < recommendations.length; k++){
         recommendList[k] = recommendations[k];
-				console.log(recommendations[k]);
+				//console.log(recommendations[k]);
 			}
 
 
