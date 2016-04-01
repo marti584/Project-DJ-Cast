@@ -1,9 +1,7 @@
 <template name="channel">
     {{#with channel}}
     <div class=playerbody>
-      {{#if isModerator}}
-      <button id="CloseRoom" type="button" class="btn btn-default">Close Room</button>
-      {{/if}}
+ 
       <section>
         <div class="headleft">
           <h1 class="roomtitle">{{title}}</h1>
@@ -118,9 +116,10 @@
 <template name="Moderator">
   <div id="player"></div>
   <br>
-  <span style="display: inline;">
+  <span style="display: inline; margin-right: 60px;">
     <input id="playPauseButton" class="playskip" type="button" value="Pause" OnClick="playPauseClick()"/>
     <input id="skipButton" class="playskip" type="button" value="Skip"/>
+    <input id="CloseRoom" type="button" class="playskip" value="Close Room">
   </span>
 
   <script>
