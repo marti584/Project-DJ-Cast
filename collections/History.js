@@ -68,3 +68,9 @@ History.getLatest = function(channelID) {
     limit: limit
   });
 }
+
+History.getChannelList = function(channelID) {
+  return History.find({
+    channelID: channelID
+  });
+}

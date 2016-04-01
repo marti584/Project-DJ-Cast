@@ -1,6 +1,9 @@
 <template name="channel">
     {{#with channel}}
     <div class=playerbody>
+      {{#if isModerator}}
+      <button id="CloseRoom" type="button" class="btn btn-default">Close Room</button>
+      {{/if}}
       <section>
         <div class="headleft">
           <h1 class="roomtitle">{{title}}</h1>
@@ -22,7 +25,9 @@
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
                     </p>
           {{> suggestionModal}}<p></p>
-          {{> qrCode }}
+          {{#if isModerator}}
+            {{> qrCode }}
+          {{/if}}
           {{> sourceSelect}}
 
         </div>
@@ -45,7 +50,29 @@
       {{#each getRecent}}
         <img src="{{thumbnail}}" class="historyQ">
       {{/each}}
-    </div> 
+    </div>
+
+  <div class="queue-group">
+    {{#if getQueue}}
+      <h3 class="queue-head">Upcoming Songs</h3>
+      {{#each getQueue}}
+        <a href="#" class="queue-group-item">
+        <div class="row" style="margin-bottom: 10px;">
+          <div class="col-md-7">
+            <h4 class="queue-group-item-heading">{{votes}} {{title}}</h4>
+          </div>
+          <div class="col-md-5">
+            <span>
+              <input id="downvoteButton" type="button" value="Downvote" style="width: 100px;"/>
+              <input id="upvoteButton" type="button" value="Upvote" style="width: 100px;"/>
+            </span>
+          </div>
+        </div>
+        </a>
+    {{/each}}
+  {{/if}}
+  </div>
+
   </div>
 	{{/with}}
 
@@ -63,7 +90,7 @@
     <div class="showQr" hidden = "true;">
       {{> QrCode text=getCurrentUrl }}
     </div>
-</template> 
+</template>
 
 <template name="searchBox">
   <input type="text" class="search" id="search-box" placeholder="search youtube here">
@@ -77,7 +104,7 @@
         <div class="col-md-11">
           <h4 class="list-group-item-heading">{{snippet.title}}</h4>
         </div>
-        </div>
+      </div>
         </a>
     {{/each}}
     </div>
@@ -96,8 +123,7 @@
 
         </h4>
       </div>
-      <div class="modal-body" id="modal">
-        
+      <div class="modal-body" id="modal">        
         <label for="recommendations" id="reco">No suggestions yet..</label>
         <br>
         <label for="recommendations" id="reco2"></label>
@@ -107,9 +133,7 @@
         <label for="recommendations" id="reco4"></label>
         <br>
         <label for="recommendations" id="reco5"></label>
-        <br>
-
-        
+        <br>        
       </div>
       <div class="modal-footer">
       </div>
