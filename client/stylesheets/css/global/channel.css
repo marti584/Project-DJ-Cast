@@ -3,9 +3,43 @@ img.playerimg {
     display: inline-block;
  	margin-left: auto;
   	margin-right: auto;
-  	width: 450px;
-    height: 450px;
+  	width: 480px;
+    height: 270px;
+    object-fit: cover;
 }
+
+
+
+img.historyQ {
+    width: 200px;
+    height: 110px;
+    object-fit: cover;
+    margin:0px 1px 10px 1px;
+    border-radius: 8px;
+
+    
+}
+
+button.suggestionButton {
+    background-color: white;
+    color: black;
+    padding: 5px 10px;
+    border: 2px solid #656565;
+    font-size: 12px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    
+    float: right;
+    
+    margin: 10px auto;
+}
+
+button.suggestionButton:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    background-color: #656565; /* Green */
+    color: white;
+}
+
 
 body{
       background-image:url("http://www.photoblog.ie/wp-content/uploads/2014/05/album-covers-collage.jpg");
@@ -13,10 +47,16 @@ body{
       
 }
 
+button.socialbutton{
+    float: right;
+    width: 61px;
+    height: 22px;
+    margin-top: -11px;
+}
+
 div.player {
     width: 600px;
-    margin: auto 0;
-    margin-left:35%;
+    margin: 0 auto;
     text-align:center;
 
 }
@@ -37,6 +77,21 @@ div.headright{
 
 }
 
+div.upnext {
+    float:left;
+    width:50%;
+    position:absolute;
+}
+
+div.showQr {
+    background-color: white;
+    text-align: center;
+    width: 300px;
+    height: 300px;
+    padding-top: 22px;
+    position: absolute;
+}
+
 btn-o{
     float:right;
 }
@@ -49,7 +104,7 @@ element{
     float:right;
 }
  
-input { 
+input.search { 
     background: white; 
     border: 1px double #DDD; 
     border-radius: 5px; 
@@ -61,12 +116,38 @@ input {
     float:right;
   } 
 
+input.playskip {
+    background-color: white;
+    color: black;
+    padding: 10px 30px;
+    border: 2px solid #656565;
+    font-size: 20px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+
+input.playskip:hover {
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    background-color: #656565; /* Green */
+    color: white;
+}
+
 h3.songname{
 	padding-bottom:5px;
 	margin-top:5px;
 	color: #E4E4E4;
     text-align: left;
-    padding-left:75px;
+    margin-left: 55px;
+    margin-right: 60px;
+}
+
+h3.upnextsongname {
+    padding-bottom:5px;
+    margin-top:5px;
+    color: #E4E4E4;
+    text-align: left;
+    font-size: 15px;
+    margin-right: 280px;
 }
 
 h1.roomtitle{
@@ -84,7 +165,7 @@ h4.roomdesc{
     text-align: left;
 }
 
-div.container-fluid{
+div.container-fluid.sub{
 	height: 100%;
     width:100%;
     overflow:hidden;
@@ -114,6 +195,14 @@ img.control{
     display:inline-block;
 }
 
+div.historyQueue{
+    margin: 0 auto;
+    text-align: center;
+    height: 120px;
+    overflow: hidden;
+
+}
+
 .btn-info {
   color: #fff;
   background-color: #000;
@@ -122,32 +211,47 @@ img.control{
 }
 
 .list-group{
-    padding-top: 25px;
-    padding-left: 50px;
+    margin-top: 25px;
+    margin-left: 50px;
+    position: absolute;
+    overflow-y: scroll;
+    max-height: 80%;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+a.list-group-item{
+    width: 400px;
+    background-color: rgba(0,0,0,.8);
+    
+
 }
 
 .list-group-item{
-    width: 400px;
     background-color: rgba(0,0,0,.8);
-
 }
 
-.list-group-item:hover{
+a.list-group-item:hover{
     width: 400px;
-    background-color: rgba(0,0,0,.8);
+    background-color: rgba(0,0,0,.3);
 
 }
 
 .list-group-item-heading{
     font-size: 16px;
-    margin-top: 0px;
-    margin-bottom: 5px;
     background-color: rgba(0,0,0,0);
+    text-align: left;
 }
 
 .col-md-1{
     padding-left: 5px;
-    width:130px;
+    width:30%;
+}
+
+.col-md-11{
+    padding-right: 5px;
+    padding-left: 0px;
+    width:70%;
 }
 
 .twitter-share-button{

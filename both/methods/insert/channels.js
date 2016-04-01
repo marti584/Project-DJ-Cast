@@ -21,5 +21,28 @@ Meteor.methods({
       // Send errors back to the client
       channel.throwValidationException();
     }
+  },
+
+  '/channels/end': function(channel) {
+    check(channel, Channel);
+
+    if (!Meteor.user()) throw new Meteor.Error('unauthorized', 'You must be logged in to remove a channel');
+
+    if (User.me()._id != channel.creator) throw new Meteor.Error('unauthorized', 'You are not authorized to remove a channel');
+
+    if(channel.validate()) {
+      let list = Song.getChannelList(channel._id);
+      let hist = History.getChannelList(channel._id);
+      for (var i = 0; i < list.length; i++) {
+        list[i].remove();
+      }
+      for (var i = 0; i < hist.length; i++) {
+        hist[i].remove();
+      }
+      channel.remove();
+    } else {
+      // Send errors back to the client
+      channel.throwValidationException();
+    }
   }
 });
