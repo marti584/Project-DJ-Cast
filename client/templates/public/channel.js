@@ -1,3 +1,5 @@
+var recommendationList = [];
+
 Template.channel.onCreated(function() {
   var self = this;
   self.autorun(function() {
@@ -35,7 +37,12 @@ Template.channel.helpers({
   nextS: function() {
     var channelId = FlowRouter.getParam('id');
     return Song.getChannelList(channelId).fetch()[1];
+  },
+  recommendations: function() {
+    console.log(recommendationList.toString());
+    return recommendationList.toString();
   }
+
 
 });
 
@@ -62,7 +69,6 @@ Template.searchBox.onCreated(function() {
 Template.searchBox.events({
   "keyup #search-box": _.throttle(function(e, template) {
     var text = $(e.target).val().trim();
-    document.getElementsByClassName('list-group')[0].hidden = false;
     self.urls = new ReactiveVar([]);
     Meteor.call('/youtube/searchForMusic', text, 12, function(err, res) {
       if (err) {
@@ -70,9 +76,6 @@ Template.searchBox.events({
       }
       template.urls.set(res.items);
     });
-    
-    
-
   }, 1000),
   "click .list-group-item": function (e, template) {
     var newsong = new Song();
@@ -82,11 +85,10 @@ Template.searchBox.events({
     newsong.set("source", this.id.kind); 
     newsong.set("channelID", FlowRouter.getParam('id'));
 
-    document.getElementsByClassName('list-group')[0].hidden = true;
-    document.getElementsByClassName('search')[0].placeholder = 'search youtube here';
     Meteor.call('/youtube/new', newsong, function(err, res) { 
 
     } );
+
   }
 });
 
@@ -252,8 +254,12 @@ Template.Moderator.events({
 
 			console.log("Recommend:");
 			for(k = 0; k < recommendations.length; k++){
+        recommendationList[k] = recommendations[k];
 				console.log(recommendations[k]);
 			}
+
+
+
 
 
     }
