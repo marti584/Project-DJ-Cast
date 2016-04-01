@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+var recommendList = [];
+=======
 var recommendationList = [];
+>>>>>>> dev
 
 Template.channel.onCreated(function() {
   var self = this;
@@ -52,6 +56,7 @@ Template.channel.helpers({
     console.log(recommendationList.toString());
     return recommendationList.toString();
   }
+  
 
 });
 
@@ -130,6 +135,14 @@ Template.searchBox.helpers({
 
   checkCharCount: function(title) {
     return title.length < 40;
+  }
+});
+
+
+Template.suggestionModal.helpers({
+  recommendMe: function() {
+    
+    return recommendList.toString();
   }
 });
 
@@ -283,17 +296,10 @@ Template.Moderator.events({
 					async: false
 				});
 			}
-
-			console.log("Recommend:");
 			for(k = 0; k < recommendations.length; k++){
-        recommendationList[k] = recommendations[k];
-				console.log(recommendations[k]);
+        recommendList[k] = recommendations[k];
+				//console.log(recommendations[k]);
 			}
-
-
-
-
-
     }
   },
 });
@@ -302,6 +308,17 @@ Template.qrCode.events({
   "click button": function(e, template) {
     var status = document.getElementsByClassName('showQr')[0].hidden;
     document.getElementsByClassName('showQr')[0].hidden = !status;
+  }
+});
+
+Template.suggestionModal.events({
+  "click button": function(e, template) {
+  
+  document.getElementById('reco').innerHTML = recommendList[0];
+  document.getElementById('reco2').innerHTML = recommendList[1];
+  document.getElementById('reco3').innerHTML = recommendList[2];
+  document.getElementById('reco4').innerHTML = recommendList[3];
+  document.getElementById('reco5').innerHTML = recommendList[4];
   }
 });
 
