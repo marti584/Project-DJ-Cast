@@ -5,92 +5,131 @@
         <div class="headleft">
           <h1 class="roomtitle">{{title}}</h1>
           <h4 class="roomdesc">{{query}}</h4>
-         </div>
-       <div class="headright" style="float:right;">
-          <!-- <input type="text" name="search" class="textbox" placeholder="Request Song..."> -->{{> searchBox}}<p></p>
-                    <a href="https://twitter.com/share" class="twitter-share-button" data-text="Listening to {{title}} on DJ-Cast" data-via="djcast_">Tweet</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+          <div class="upnext">
+            {{#with nextS}}
+              <h3 class="upnextsongname">Up next.. {{title}}</h3>
+              <img src="{{thumbnail}}" class="historyQ">
+            {{/with}}
+          </div>
+        </div>
+
+         <div class="headright">
+          {{> searchBox}}<p></p>
+                    {{> suggestionModal}}<p></p>
+                    <p><br><a href="https://twitter.com/share" class="twitter-share-button" data-text="Listening to {{title}} on DJ-Cast" data-via="djcast_">Tweet</a></p>
+          {{> qrCode }}
+          {{> sourceSelect}}
+
         </div>
       </section>
+
       {{#with currentSong}}
         <div class="player">
-
-        
-        <!-- <img src="http://www.billboard.com/files/styles/gallery_main_well_2/public/media/M-I-A-Kala-album-covers-billboard-1000x1000.jpg" class="playerimg"> -->
-        {{#if isModerator}}
-        {{> Moderator videoId=videoID }}
-
-        {{else}}
-        <img src="{{thumbnail}}" class="playerimg">
-        {{/if}}
-
-        <!--{{#with history}}
-
-          <img src="{{thumbnail}}" class="playerimg">
-        {{/with}}-->
-
-        <div class="playermeta">
-        <h3 class="songname">{{title}}</h3>
-        </div>
-
-        <div class="queue-group">
-        <h3 class="queue-head">Upcoming Songs</h3>
-        {{#each getQueue}}
-          <a href="#" class="queue-group-item">
-          <div class="row" style="margin-bottom: 10px;">
-            <div class="col-md-7">
-              <h4 class="queue-group-item-heading">{{votes}} {{title}}</h4>
-            </div>
-            <div class="col-md-5">
-              <span>
-                <input id="downvoteButton" type="button" value="Downvote" style="width: 100px;"/>
-                <input id="upvoteButton" type="button" value="Upvote" style="width: 100px;"/>
-              </span>
-            </div>
+          {{#if isModerator}}
+            {{> Moderator videoId=videoID }}
+          {{else}}
+            <img src="{{thumbnail}}" class="playerimg">
+          {{/if}}
+          <div class="playermeta">
+            <h3 class="songname">{{title}}</h3>
           </div>
-          </a>
-        {{/each}}
-        </div>
-
         </div>
       {{/with}}
-    </div>
-	{{/with}}
-</template>
 
-<template name="searchBox">
-  <input type="text" class="search" id="search-box" placeholder="search youtube here">
-  <div class="list-group">
-  {{#each getSearchResults}}
-      <a href="#" class="list-group-item">
-      <div class="row">
-        <div class="col-md-1">
-          <img src="{{snippet.thumbnails.default.url}}" class="img-responsive"/>
-        </div>
-        <div class="col-md-11">
-          <h4 class="list-group-item-heading">{{snippet.title}}</h4>
-        </div>
+    <div class="historyQueue">
+      {{#each getRecent}}
+        <img src="{{thumbnail}}" class="historyQ">
+      {{/each}}
+    </div>
+
+  <div class="queue-group">
+  <h3 class="queue-head">Upcoming Songs</h3>
+  {{#each getQueue}}
+    <a href="#" class="queue-group-item">
+    <div class="row" style="margin-bottom: 10px;">
+      <div class="col-md-7">
+        <h4 class="queue-group-item-heading">{{votes}} {{title}}</h4>
       </div>
-      </a>
+      <div class="col-md-5">
+        <span>
+          <input id="downvoteButton" type="button" value="Downvote" style="width: 100px;"/>
+          <input id="upvoteButton" type="button" value="Upvote" style="width: 100px;"/>
+        </span>
+      </div>
+    </div>
+    </a>
   {{/each}}
   </div>
+
+  </div>
+	{{/with}}
+
 </template>
 
+<template name="sourceSelect">
+  <select id="src">
+    <option value="youtube">Youtube</option>
+    <option value="soundcloud">SoundCloud</option>
+  </select>
+</template>
+
+<template name="qrCode">
+  <button type="button">QR</button>
+    <div class="showQr" style = "display:false;">
+      {{> QrCode text=getCurrentUrl }}
+    </div>
+</template> 
+
+<template name="searchBox">
+  <input type="text" class="search" id="search-box" placeholder="search here">
+    <div class="list-group">
+    {{#each getSearchResults}}
+        <a href="#" class="list-group-item">
+        <div class="row">
+          <div class="col-md-1">
+            <img src="{{snippet.thumbnails.default.url}}" class="img-responsive"/>
+          </div>
+          <div class="col-md-11">
+            <h4 class="list-group-item-heading">{{snippet.title}}</h4>
+          </div>
+        </div>
+        </a>
+    {{/each}}
+    </div>
+</template>
+
+<template name="suggestionModal">
+<button type="button" id="largeCreate" class="suggestionButton" data-toggle="modal" data-target="#myModal2">Suggestions</button>
+<!-- Modal -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Suggested Songs
+
+        </h4>
+      </div>
+      <div class="modal-body" id="modal">
+        <form>
+          
+        </form>
+        
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+</template>
 
 <template name="Moderator">
   <div id="player"></div>
   <br>
-  <!--<label id="title" ></label>
-  <br>
-  <span style="display: inline;">
-    <label id="elapsed"></label>
-    <label >/</label>
-    <label id="duration"></label>
-  </span>
-  <br>-->
   <span style="display: inline;">
     <input id="playPauseButton" class="playskip" type="button" value="Pause" OnClick="playPauseClick()"/>
-    <input id="skipButton" class="playskip" type="button" value="Skip" OnClick="skipClick()"/>
+    <input id="skipButton" class="playskip" type="button" value="Skip"/>
   </span>
 
   <script>
@@ -103,15 +142,15 @@
     var player;
     function onYouTubeIframeAPIReady() {
       player = new YT.Player('player', {
-        height: '400',
-        width: '600',
+        height: '270',
+        width: '480',
         videoId: '{{videoId}}',
         playerVars: {
           'autoplay': 1,
           'controls': 0,
           'disablekb': 1,
           'enablejsapi': 1,
-          'rel': 0
+          'rel': 0,
         },
         events: {
           'onReady': onPlayerReady,
@@ -121,14 +160,22 @@
     }
 
     function onPlayerReady(event) {
-      //document.getElementById("title").innerText = player.getVideoData().title;
-      //document.getElementById("duration").innerText = player.getDuration;
       event.target.playVideo();
     }
 
     function onPlayerStateChange(event) {
       if (event.data == YT.PlayerState.ENDED) {
         var channelId = FlowRouter.getParam('id');
+        var song = Song.getLatest(channelId).fetch()[0];
+      
+        var hist = new History();
+        hist.set("title", song.title);
+        hist.set("videoID", song.videoID);
+        hist.set("thumbnail", song.thumbnail);
+        hist.set("source", song.source); 
+        hist.set("channelID", song.channelID);
+  
+        Meteor.call('/history/new', hist, function(err, res){});
         Meteor.call('/song/remove', Song.getLatest(channelId).fetch()[0], function(err, res) { 
           if (err) {}
             if (Song.getLatest(channelId).fetch()[0]) {
@@ -136,8 +183,6 @@
               player.playVideo();
             }
         });
-        //document.getElementById("title").innerText = player.getVideoData().title;
-        //document.getElementById("duration").innerText = player.getDuration();
       }
     }
 
@@ -154,11 +199,14 @@
 
     }
 
-    
-
+    !function(d,s,id){
+      var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';
+      if(!d.getElementById(id)){
+        js=d.createElement(s);
+        js.id=id;js.src=p+'://platform.twitter.com/widgets.js';
+        fjs.parentNode.insertBefore(js,fjs);
+      }
+    }(document, 'script', 'twitter-wjs');
 
   </script>
-  <!--{{> myButtons}}-->
 </template>
-
-

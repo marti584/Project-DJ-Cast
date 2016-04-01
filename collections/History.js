@@ -52,7 +52,19 @@ History.getLatest = function(channelID) {
   return History.find({
     channelID: channelID
   }, {
-    sort: {createdAt: 1}, 
-    limit: 1
+    sort: {createdAt: -1}, 
+    limit: 5
+  });
+}
+
+ History.getRecent = function(channelID) {
+  // Default to 20
+  limit = 6;
+
+  return History.find({
+    channelID: channelID
+  }, {
+    sort: {createdAt: -1}, 
+    limit: limit
   });
 }

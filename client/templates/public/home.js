@@ -8,10 +8,8 @@ Template.home.helpers({
   },
   addDisabled: function() {
     if (!Meteor.user()) {
-      console.log("No user");
       return 'disabled';
     }
-    console.log("User");
   }
 });
 
@@ -38,14 +36,10 @@ Template.home.events({
   },
 
   "click button": function (e, template) {
-    console.log(e);
     if (e.target.id == "largeCreate") {
-      console.log("Large came");
       template.data.channel = new Channel();
     } else if (e.target.id == "joinRoom") {
-      console.log("Join room button");
       FlowRouter.go('/channels');
-
     } 
   }
 
