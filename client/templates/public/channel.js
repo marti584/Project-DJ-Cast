@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 var recommendList = [];
-=======
 var recommendationList = [];
->>>>>>> dev
 
 Template.channel.onCreated(function() {
   var self = this;
@@ -168,6 +165,16 @@ Template.Moderator.helpers({
 
 Template.Moderator.events({
   "click input": function (e, template) {
+
+    if (e.target.id === "CloseRoom") {
+      e.stopPropagation();
+      var channel = Channel.findOne(this._id);
+      Meteor.call('/channels/end', channel, function(err, res) {
+          FlowRouter.go('/channels');
+      });
+    }
+
+
     if (e.target.id == "skipButton") {
       var channelId = FlowRouter.getParam('id');
       var song = Song.getLatest(channelId).fetch()[0];
@@ -218,6 +225,8 @@ Template.Moderator.events({
 					},
 					async: false
 				});
+
+
 
 			}
 			
@@ -302,6 +311,7 @@ Template.Moderator.events({
 			}
     }
   },
+
 });
 
 Template.qrCode.events({
