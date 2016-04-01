@@ -1,6 +1,9 @@
 <template name="channel">
     {{#with channel}}
     <div class=playerbody>
+      {{#if isModerator}}
+      <button id="CloseRoom" type="button" class="btn btn-default">Close Room</button>
+      {{/if}}
       <section>
         <div class="headleft">
           <h1 class="roomtitle">{{title}}</h1>
@@ -16,7 +19,10 @@
          <div class="headright">
           {{> searchBox}}<p></p>
                     <p><br><a href="https://twitter.com/share" class="twitter-share-button" data-text="Listening to {{title}} on DJ-Cast" data-via="djcast_">Tweet</a></p>
-          {{> qrCode }}
+
+          {{#if isModerator}}
+            {{> qrCode }}
+          {{/if}}
           {{> sourceSelect}}
 
         </div>
@@ -56,7 +62,7 @@
     <div class="showQr" style = "display:false;">
       {{> QrCode text=getCurrentUrl }}
     </div>
-</template> 
+</template>
 
 <template name="searchBox">
   <input type="text" class="search" id="search-box" placeholder="search here">
