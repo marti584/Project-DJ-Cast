@@ -1,46 +1,32 @@
 <template name = "home">
   <h1>Dj-Cast</h1>
-
   <button type="button" id="largeCreate" class="button button1" data-toggle="modal" data-target="#myModal">create a room</button>
-<!-- Modal -->
+
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Create Room
-
-        </h4>
+        <h4 class="modal-title" id="myModalLabel">Create Room</h4>
       </div>
+      
       <div class="modal-body" id="modal">
-        <form>
-        	<label for="rname">Room Name:</label>
-          <input id="title" class="inputmodal" type="text" name="roomname"><br>
-          <label for="desc">Description:</label>
-          <input id="query" class="inputmodal" type="text" name="roomdesc"><br>
-          <!-- {{#unless currentUser}}
-        	Admin Name: <br>
-        	<input type="text" name="adminname"><br>
-          Admin Password: <br>
-          <input type="text" name="password"><br>
-          {{/unless}} -->
-        
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="submit" id="submit" class="btn button1" dismiss="modal" {{addDisabled}} >Create</button>
-        </form>
         {{#unless currentUser}}
           {{> loginButtons}}
         {{/unless}}
-      </div>
-      <div class="modal-footer">
+        <form>
+          <fieldsRoom>
+          	<label for="rname">Room Name:</label>
+            <input id="title" class="inputmodal" type="text" name="roomname"><br>
+            <label for="desc">Description:</label>
+            <input id="query" class="inputmodal" type="text" name="roomdesc"><br>        
+          </fieldsRoom>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="submit" id="submit" class="btn button1" dismiss="modal" {{addDisabled}} >Create</button>
+        </form>
       </div>
     </div>
   </div>
 </div>
-
-
   <button type="button" id="joinRoom" class="button button2">join a room</button>
-
-  
 </template>

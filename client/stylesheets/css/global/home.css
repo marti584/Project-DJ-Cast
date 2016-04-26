@@ -1,0 +1,12 @@
+label{
+	display:inline-block;
+	width:200px;
+	margin-right:0px auto;
+	text-align:left;
+}
+
+fieldsRoom{
+	border:none;
+	width:500px;
+	margin:0px auto;
+}
