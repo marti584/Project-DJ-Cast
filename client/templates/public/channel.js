@@ -247,7 +247,6 @@ Template.prepopulate.events({
 
 			var g;
 			for(g = 0; g < songpop.length; g++){
-				console.log("top song: " + songpop[g]);
 			
 			
 				Meteor.call('/youtube/searchForMusic', songpop[g], 1, function(err, res) {
