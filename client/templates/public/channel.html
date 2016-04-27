@@ -26,7 +26,7 @@
         </div>
 
          <div class="headright">
-          {{> searchBox}}{{> suggestionModal}}<br>
+          {{> searchBox}}{{> suggestionModal}}{{> prepopulate}}<br>
 
           {{> sourceSelect}}
 
@@ -124,6 +124,10 @@
     </div>
 </template>
 
+<template name="prepopulate">
+	<button type="button" id="populate-button" class="populateButton">Prepopulate Queue</button>
+</template>
+
 <template name="suggestionModal">
 <button type="button" id="largeCreate" class="suggestionButton" data-toggle="modal" data-target="#myModal2">Song Suggestions</button>
 <!-- Modal -->
@@ -149,6 +153,28 @@
         <label for="recommendations" id="reco5"></label>
         <br>        
       </div>
+			<!--<div class="list-group" hidden = "true;">
+  		{{#each getSearchResults}}
+      <a href="#" class="list-group-item">
+      <div class="row">
+        <div class="col-md-1">
+          {{#if isYoutube}}
+          <img src="{{snippet.thumbnails.default.url}}" class="img-responsive"/>
+          {{else}}
+          <img src="{{artwork_url}}" class="img-responsive"/>
+          {{/if}}
+        </div>
+        <div class="col-md-11">
+          {{#if isYoutube}}
+          <h4 class="list-group-item-heading">{{snippet.title}}</h4>
+          {{else}}
+          <h4 class="list-group-item-heading">{{title}}</h4>
+          {{/if}}
+        </div>
+      </div>
+        </a>
+    {{/each}}
+    </div>-->
       <div class="modal-footer">
       </div>
     </div>
