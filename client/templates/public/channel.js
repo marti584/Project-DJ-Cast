@@ -189,19 +189,17 @@ Template.suggestionModal.helpers({
 
 Template.prepopulate.events({
 	"click #populate-button": function (e, template) {
+    document.getElementById('populate-button').hidden = true;
 		//Get top pop artist
 		var myUrl = 'http://developer.echonest.com/api/v4/genre/artists';
-
 		var artists = [];
 		var artistID = [];
-		
 		var args = {
 							format: 'json',
 							api_key: 'DHTQGX3WXZI7YKQSF',
 							name: "pop",
 							results: 10,
 		};
-
 		$.ajax({
 			type: 'GET',
 			url: myUrl,
@@ -217,67 +215,54 @@ Template.prepopulate.events({
 		});
 
 
-			myUrl = 'http://developer.echonest.com/api/v4/song/search';
-			var k;
-			var songpop = [];
-			for(k = 0; k < artists.length; k++){
-				songpop[k] = "";
-			}
-			for(k = 0; k < artistID.length; k++){
-				var args = {
-									format: 'json',
-									api_key: 'DHTQGX3WXZI7YKQSF',
-									artist_id: artistID[k],
-									sort: 'song_hotttnesss-desc',
-									results: 1,
-				}
+  	myUrl = 'http://developer.echonest.com/api/v4/song/search';
+  	var k;
+  	var songpop = [];
+  	for(k = 0; k < artists.length; k++){
+  		songpop[k] = "";
+  	}
+  	for(k = 0; k < artistID.length; k++){
+  		var args = {
+  							format: 'json',
+  							api_key: 'DHTQGX3WXZI7YKQSF',
+  							artist_id: artistID[k],
+  							sort: 'song_hotttnesss-desc',
+  							results: 1,
+  		}
 
-				$.ajax({
-					type: 'GET',
-					url: myUrl,
-					data: args,
-					dataType: 'json',
-					success: function(data){
-						//$each(data.response.songs, function (key, val){
-						
-						//});
+			$.ajax({
+				type: 'GET',
+				url: myUrl,
+				data: args,
+				dataType: 'json',
+				success: function(data){
+					songpop[k] = songpop[k].concat(artists[k]);
+					songpop[k] = songpop[k].concat(" - ");
+					songpop[k] = songpop[k].concat(data.response.songs[0].title);
+				},
+				async: false
+			});
+		}
 
-						songpop[k] = songpop[k].concat(artists[k]);
-						songpop[k] = songpop[k].concat(" - ");
-						songpop[k] = songpop[k].concat(data.response.songs[0].title);
-					},
-					async: false
-				});
-			}
+		var g;
+		for(g = 0; g < songpop.length; g++){
+			Meteor.call('/youtube/searchForMusic', songpop[g], 1, function(err, res) {
+      	var channelId = FlowRouter.getParam('id');
+  			var newsong = new Song();
+    		newsong.set("title", res.items[0].snippet.title);
+    		newsong.set("videoID", res.items[0].id.videoId);
+    		newsong.set("thumbnail", res.items[0].snippet.thumbnails.high.url);
+    		newsong.set("source", 'youtube');	
+				newsong.set("channelID", FlowRouter.getParam('id'));
+  			newsong.set("votes", 1);
+  			if (Song.getLatest(channelId).fetch()[0] != null)
+    			newsong.set("currentlyPlaying", false);
+  			else
+    			newsong.set("currentlyPlaying", true);
+				Meteor.call('/youtube/new', newsong, function(err, res2) { 
 
-			var g;
-			for(g = 0; g < songpop.length; g++){
-			
-			
-				Meteor.call('/youtube/searchForMusic', songpop[g], 1, function(err, res) {
-        	var channelId = FlowRouter.getParam('id');
-    			var newsong = new Song();
-      		newsong.set("title", res.items[0].snippet.title);
-      		newsong.set("videoID", res.items[0].id.videoId);
-      		newsong.set("thumbnail", res.items[0].snippet.thumbnails.high.url);
-      		newsong.set("source", 'youtube');
-
-					console.log("title: " + newsong.title);
-					console.log("id: " + newsong.videoID);
-			
-
-					newsong.set("channelID", FlowRouter.getParam('id'));
-    			newsong.set("votes", 1);
-    			if (Song.getLatest(channelId).fetch()[0] != null)
-      			newsong.set("currentlyPlaying", false);
-    			else
-      			newsong.set("currentlyPlaying", true);
-					
-					Meteor.call('/youtube/new', newsong, function(err, res2) { 
-
-    			} );
-      	});
-
+  			} );
+    	});
 		}
 	}
 });
@@ -491,7 +476,7 @@ Template.suggestionModal.onCreated(function() {
 Template.suggestionModal.events({
   "click #largeCreate": function(e, template) {
     document.getElementById('rec-modal').hidden = false;
-
+    template.urls.set([]);
     self.urls = new ReactiveVar([]);
 		var allItems = [];
 
@@ -557,5 +542,9 @@ Template.sourceSelect.events({
   "change select": function(e, template) {
     var sel = document.getElementById('src');
     Template.searchBox.currentSource = sel.options[ sel.selectedIndex ].value;
+    if(sel.options[sel.selectedIndex].value == "youtube")
+      document.getElementById('search-box').placeholder = "search YouTube here";
+    else
+      document.getElementById('search-box').placeholder = "search SoundCloud here";
   }
 });
