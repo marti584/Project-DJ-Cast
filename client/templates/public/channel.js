@@ -177,7 +177,6 @@ Template.searchBox.helpers({
 
 Template.suggestionModal.helpers({
   recommendMe: function() {
-    
     return recommendList.toString();
   }
 });
@@ -375,7 +374,6 @@ Template.Moderator.events({
 			var size = History.getLatest(channelId).fetch().length;
 			var lastPlayed = History.getLatest(channelId).fetch();
 
-
 			//Clean the Video Title to get the Artist only
 			var myUrl = 'http://developer.echonest.com/api/v4/artist/extract';
 
@@ -385,7 +383,7 @@ Template.Moderator.events({
 									format: 'json',
 									api_key: 'DHTQGX3WXZI7YKQSF',
 									text: lastPlayed[i].title,
-									min_familiarity: '0.7',
+									min_familiarity: '0.5',
 									results: 1,
 				};
 
@@ -399,19 +397,7 @@ Template.Moderator.events({
 					},
 					async: false
 				});
-
-
-
 			}
-			
-			//for(i = 0; i < size; i++){
-				//console.log("Artist: " + cleanedArtists[i]);
-			//}
-
-			//for(i = 0; i < size; i++){
-				//console.log("Artists: " + JSON.stringify(cleanedArtists[i]));
-			//}
-			//Suggest similar artists
 			myUrl = 'http://developer.echonest.com/api/v4/artist/similar';
 			var args = {
 						format: 'json',
@@ -439,11 +425,6 @@ Template.Moderator.events({
 				},
 				async: false
 			});
-
-			//for(i = 0; i < similarArtists.length; i++){
-				//console.log("Similar Artist: " + similarArtists[i]);
-			//}
-
 			//Get the hottest song for each similar artist
 			myUrl = 'http://developer.echonest.com/api/v4/song/search';
 			var k;
@@ -457,21 +438,14 @@ Template.Moderator.events({
 									api_key: 'DHTQGX3WXZI7YKQSF',
 									artist_id: similarIDS[k],
 									sort: 'song_hotttnesss-desc',
-									min_tempo: '100',
-									min_danceability: '.7',
 									results: 1,
 				}
-
 				$.ajax({
 					type: 'GET',
 					url: myUrl,
 					data: args,
 					dataType: 'json',
 					success: function(data){
-						//$each(data.response.songs, function (key, val){
-						
-						//});
-
 						recommendations[k] = recommendations[k].concat(similarArtists[k]);
 						recommendations[k] = recommendations[k].concat(" - ");
 						recommendations[k] = recommendations[k].concat(data.response.songs[0].title);
@@ -481,7 +455,6 @@ Template.Moderator.events({
 			}
 			for(k = 0; k < recommendations.length; k++){
         recommendList[k] = recommendations[k];
-				//console.log(recommendations[k]);
 			}
     }
   },
@@ -495,14 +468,62 @@ Template.qrCode.events({
   }
 });
 
+Template.suggestionModal.onCreated(function() {
+  var self = this;
+  self.autorun(function() {
+    self.urls = new ReactiveVar([]);
+  });
+
+});
+
 Template.suggestionModal.events({
-  "click button": function(e, template) {
-  
-  document.getElementById('reco').innerHTML = recommendList[0];
-  document.getElementById('reco2').innerHTML = recommendList[1];
-  document.getElementById('reco3').innerHTML = recommendList[2];
-  document.getElementById('reco4').innerHTML = recommendList[3];
-  document.getElementById('reco5').innerHTML = recommendList[4];
+  "click #largeCreate": function(e, template) {
+    document.getElementById('rec-modal').hidden = false;
+
+    self.urls = new ReactiveVar([]);
+		var allItems = [];
+
+		for(var i = 0; i < 5; i++){
+    	Meteor.call('/youtube/searchForMusic', recommendList[i], 1, function(err, res) {
+        if (err) {
+          throw err;
+        }
+        var stuff = template.urls.get();
+        stuff.push(res.items[0]);
+        template.urls.set(stuff);
+      });
+		}
+  },
+  "click .rec-list-group-item": function (e, template) {
+
+    var channelId = FlowRouter.getParam('id');
+    var newsong = new Song();
+    if (Template.searchBox.currentSource == 'youtube') {
+      newsong.set("title",this.snippet.title);
+      newsong.set("videoID", this.id.videoId);
+      newsong.set("thumbnail", this.snippet.thumbnails.high.url);
+      newsong.set("source", 'youtube');
+    } 
+    newsong.set("channelID", FlowRouter.getParam('id'));
+    newsong.set("votes", 1);
+    if (Song.getLatest(channelId).fetch()[0] != null)
+      newsong.set("currentlyPlaying", false);
+    else
+      newsong.set("currentlyPlaying", true);
+
+    Meteor.call('/youtube/new', newsong, function(err, res) { 
+
+    } );
+    document.getElementById('rec-modal').hidden = true;
+
+
+  }
+
+});
+
+Template.suggestionModal.helpers({
+	getRecSearchResults: function() {
+    return Template.instance().urls.get();
   }
 });
 

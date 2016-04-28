@@ -133,25 +133,26 @@
 <!-- Modal -->
 <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
-    <div class="modal-content">
+    <div class="modal-content" id='rec-modal'>
       <div class="modal-header">
-        
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Suggested Songs
-
-        </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="false">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Suggested Songs</h4>
       </div>
       <div class="modal-body" id="modal">        
-        <label for="recommendations" id="reco">No suggestions yet..</label>
-        <br>
-        <label for="recommendations" id="reco2"></label>
-        <br>
-        <label for="recommendations" id="reco3"></label>
-        <br>
-        <label for="recommendations" id="reco4"></label>
-        <br>
-        <label for="recommendations" id="reco5"></label>
-        <br>        
+       	<div class="rec-list-group">
+  			{{#each getRecSearchResults}}
+      		<a href="#" class="rec-list-group-item">
+		      <div class="row">
+  		      <div class="col-md-1">
+    		      <img src="{{snippet.thumbnails.default.url}}" class="img-responsive"/>
+        		</div>
+        		<div class="col-md-11">
+          		<h4 class="rec-list-group-item-heading">{{snippet.title}}</h4>
+        		</div>
+      		</div>
+        	</a>
+    		{{/each}}
+    		</div>
       </div>
       <div class="modal-footer">
       </div>
