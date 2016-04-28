@@ -345,6 +345,9 @@ Template.Moderator.events({
       var channelId = FlowRouter.getParam('id');
       var song = Song.getLatest(channelId).fetch()[0];
       var next = Template.channel.__helpers[" nextS"]();
+      var button = document.getElementById("playPauseButton");
+      button.value = "Pause";
+
 
       if (song.source == 'soundcloud')
         sound.pause();
