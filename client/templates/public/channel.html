@@ -26,7 +26,7 @@
         </div>
 
          <div class="headright">
-          {{> searchBox}}{{> suggestionModal}}<br>
+          {{> searchBox}}{{> suggestionModal}}{{> prepopulate}}<br>
 
           {{> sourceSelect}}
 
@@ -122,6 +122,10 @@
         </a>
     {{/each}}
     </div>
+</template>
+
+<template name="prepopulate">
+	<button type="button" id="populate-button" class="populateButton">Prepopulate Queue</button>
 </template>
 
 <template name="suggestionModal">
