@@ -121,7 +121,7 @@ input.search {
     color: #666; 
     outline: none; 
     height:25px; 
-    width: 275px; 
+    width: 260px; 
     float:right;
   } 
 
@@ -148,6 +148,20 @@ h3.songname{
     text-align: center;
     margin-left: 55px;
     margin-right: 60px;
+}
+
+h3.songnamemobile{
+    padding-bottom:5px;
+    margin-top:5px;
+    color: #E4E4E4;
+    text-align: center;
+    margin-left: 55px;
+    margin-right: 60px;
+    text-align: left; 
+    margin-left: -1px; 
+    padding-top: 180px;
+    font-size: 16px;
+
 }
 
 h3.upnextsongname {
@@ -279,6 +293,13 @@ a.list-group-item:hover{
 }
 
 .queue-group-item-heading{
+    font-size: 16px;
+    margin-top: 0px;
+    margin-bottom: 5px;
+    background-color: rgba(0,0,0,0);
+}
+
+.queue-group-item-heading-mobile{
     font-size: 16px;
     margin-top: 0px;
     margin-bottom: 5px;

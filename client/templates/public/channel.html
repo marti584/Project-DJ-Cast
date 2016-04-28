@@ -9,8 +9,16 @@
 
 
 
-<a href="https://twitter.com/share" class="twitter-share-button" data-text="I am listening to {{title}} on #djcast_" data-via="djcast_"></a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<a id="twidget" href="https://twitter.com/share" class="twitter-share-button" data-text="I am listening to {{title}} on #djcast_" data-via="djcast_"></a>
+<script>
+{{#if isMobile}}
+
+            {{else}}
+            !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+            {{/if}}
+
+
+</script>
               
           {{#if isModerator}}
             {{> qrCode }}
@@ -48,7 +56,8 @@
               document.getElementById("history").hidden = true;
               document.getElementById("playerbod").hidden = true;
               document.getElementById("upcoming").hidden = true;
-              
+              document.getElementById("largeCreate").hidden = true;
+              document.getElementById("twidget").hidden = true;
 
             {{else}}
             {{/if}}
@@ -66,7 +75,24 @@
       <div class="playermeta">
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-            <h3 class="songname">{{title}}</h3>
+
+              <script type="text/javascript">
+            {{#if isMobile}}
+              document.getElementById("songnmm").hidden = false;
+              document.getElementById("songnm").hidden = true;
+
+            {{else}}
+                          document.getElementById("songnmm").hidden = true;
+              document.getElementById("songnm").hidden = false;
+            {{/if}}
+
+            </script>
+
+            <h3 id="songnm" class="songname">{{title}}</h3>
+            <h3 id="songnmm" class="songnamemobile">Currently Playing: <br>{{title}}</h3>
+
+
+
       </div>
       {{/with}}
 
@@ -90,7 +116,7 @@
         <a href="#" class="queue-group-item">
         <div class="row" style="margin-bottom: 10px;">
           <div class="col-md-7">
-            <h4 class="queue-group-item-heading">{{votes}} {{title}}</h4>
+            <h4 class="queue-group-item-heading" style="margin-left: -40px;">{{votes}} {{title}}</h4>
           </div>
           <div class="col-md-5">
             <span>
@@ -363,10 +389,11 @@
       height = '270';
       width = '480';
       document.getElementById("next").hidden = true;
-      
+      document.getElementById("largeCreate").hidden = true;
       document.getElementById("history").hidden = true;
       document.getElementById("playerbod").hidden = true;
       document.getElementById("upcoming").hidden = true;
+      document.getElementById("twidget").hidden = true;
       
     {{else}}
       height = '270';
@@ -401,10 +428,11 @@
   <script type="text/javascript">
       {{#if isMobile}} 
         document.getElementById("next").hidden = true;
-      
+      document.getElementById("largeCreate").hidden = true;
         document.getElementById("history").hidden = true;
         document.getElementById("playerbod").hidden = true;
         document.getElementById("upcoming").hidden = true;
+        document.getElementById("twidget").hidden = true;
 
       
       {{else}}
