@@ -291,7 +291,7 @@ Template.Moderator.events({
 									format: 'json',
 									api_key: 'DHTQGX3WXZI7YKQSF',
 									text: lastPlayed[i].title,
-									min_familiarity: '0.7',
+									min_familiarity: '0.6',
 									results: 1,
 				};
 
@@ -363,8 +363,8 @@ Template.Moderator.events({
 									api_key: 'DHTQGX3WXZI7YKQSF',
 									artist_id: similarIDS[k],
 									sort: 'song_hotttnesss-desc',
-									min_tempo: '100',
-									min_danceability: '.7',
+									//min_tempo: '100',
+									//min_danceability: '.7',
 									results: 1,
 				}
 
@@ -402,13 +402,32 @@ Template.qrCode.events({
 });
 
 Template.suggestionModal.events({
-  "click button": function(e, template) {
-  
-  document.getElementById('reco').innerHTML = recommendList[0];
-  document.getElementById('reco2').innerHTML = recommendList[1];
-  document.getElementById('reco3').innerHTML = recommendList[2];
-  document.getElementById('reco4').innerHTML = recommendList[3];
-  document.getElementById('reco5').innerHTML = recommendList[4];
+  "click #largeCreate": function() {
+    self.urls = new ReactiveVar([]);
+		var allItems = [];
+		for(var i = 0; i < 5; i++){
+    	Meteor.call('/youtube/searchForMusic', recommendList[i], 1, function(err, res) {
+        if (err) {
+          throw err;
+        }
+				allItems[i] = res.items[0];
+        
+      });
+		}
+		self.urls.set(allItems);
+  }		
+ 			
+	 // document.getElementById('reco').innerHTML = recommendList[0];
+	 // document.getElementById('reco2').innerHTML = recommendList[1];
+	 // document.getElementById('reco3').innerHTML = recommendList[2];
+	//  document.getElementById('reco4').innerHTML = recommendList[3];
+	 // document.getElementById('reco5').innerHTML = recommendList[4];
+	// }
+});
+
+Template.suggestionModal.helpers({
+	getRecSearchResults: function() {
+    return Template.instance().urls.get();
   }
 });
 

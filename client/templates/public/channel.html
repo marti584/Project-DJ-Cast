@@ -138,7 +138,29 @@
         </h4>
       </div>
       <div class="modal-body" id="modal">        
-        <label for="recommendations" id="reco">No suggestions yet..</label>
+       	<div class="list-group" hidden = "false;">
+  			{{#each getRecSearchResults}}
+      		<a href="#" class="list-group-item">
+		      <div class="row">
+  		      <div class="col-md-1">
+    	  	    {{#if isYoutube}}
+    		      <img src="{{snippet.thumbnails.default.url}}" class="img-responsive"/>
+    	  	    {{else}}
+    	    	  <img src="{{artwork_url}}" class="img-responsive"/>
+    	    	  {{/if}}
+        		</div>
+        		<div class="col-md-11">
+          		{{#if isYoutube}}
+          		<h4 class="list-group-item-heading">{{snippet.title}}</h4>
+          		{{else}}
+          		<h4 class="list-group-item-heading">{{title}}</h4>
+          		{{/if}}
+        		</div>
+      		</div>
+        	</a>
+    		{{/each}}
+    		</div>
+				<!--<label for="recommendations" id="reco">No suggestions yet..</label>
         <br>
         <label for="recommendations" id="reco2"></label>
         <br>
@@ -147,7 +169,7 @@
         <label for="recommendations" id="reco4"></label>
         <br>
         <label for="recommendations" id="reco5"></label>
-        <br>        
+        <br>-->        
       </div>
       <div class="modal-footer">
       </div>
