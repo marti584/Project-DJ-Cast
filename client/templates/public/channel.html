@@ -57,7 +57,8 @@
               document.getElementById("playerbod").hidden = true;
               document.getElementById("upcoming").hidden = true;
               document.getElementById("largeCreate").hidden = true;
-              document.getElementById("twidget").hidden = true;              
+              document.getElementById("twidget").hidden = true;
+              document.getElementById("populate-button").hidden = true;              
             {{else}}
             {{/if}}
 
@@ -115,7 +116,7 @@
         <a href="#" class="queue-group-item">
         <div class="row" style="margin-bottom: 10px;">
           <div class="col-md-7">
-            <h4 class="queue-group-item-heading" style="margin-left: -40px;">{{votes}} {{title}}</h4>
+            <h4 class="queue-group-item-heading" style="margin-left: -40px;">[ {{votes}} ] {{title}}</h4>
           </div>
           <div class="col-md-5">
             <span>
@@ -184,7 +185,7 @@
 </template>
 
 <template name="prepopulate">
-	<button type="button" id="populate-button" class="populateButton">Prepopulate Queue</button>
+	<button type="button" id="populate-button" class="suggestionButton">Populate Queue</button>
 </template>
 
 <template name="suggestionModal">
@@ -201,13 +202,13 @@
       <div class="modal-body" id="modal">        
        	<div class="rec-list-group">
   			{{#each getRecSearchResults}}
-      		<a href="#" class="rec-list-group-item">
+      		<a href="#" class="rec-list-group-item" data-dismiss="modal" data-backdrop="false">
 		      <div class="row">
   		      <div class="col-md-1">
     		      <img src="{{snippet.thumbnails.default.url}}" class="img-responsive"/>
         		</div>
         		<div class="col-md-11">
-          		<h4 class="rec-list-group-item-heading">{{snippet.title}}</h4>
+          		<h3 class="rec-list-group-item-heading">{{snippet.title}}</h3>
         		</div>
       		</div>
         	</a>
@@ -398,6 +399,7 @@
       document.getElementById("playerbod").hidden = true;
       document.getElementById("upcoming").hidden = true;
       document.getElementById("twidget").hidden = true;
+      document.getElementById("populate-button").hidden = true;
       
     {{else}}
       height = '270';
@@ -437,6 +439,7 @@
         document.getElementById("playerbod").hidden = true;
         document.getElementById("upcoming").hidden = true;
         document.getElementById("twidget").hidden = true;
+        document.getElementById("populate-button").hidden = true;
 
       
       {{else}}
