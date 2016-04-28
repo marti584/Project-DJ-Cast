@@ -62,41 +62,24 @@
             {{/if}}
 
             </script>
-
-            
-
           {{/if}}
-          <!--<div class="playermeta">
-            <h3 class="songname">{{title}}</h3>
-          </div>-->
-
         </div>
       <div class="playermeta">
               <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
               <script type="text/javascript">
             {{#if isMobile}}
               document.getElementById("songnmm").hidden = false;
-              document.getElementById("songnm").hidden = true;
-
+              document.getElementById("songnm").hidden = true;  
             {{else}}
-                          document.getElementById("songnmm").hidden = true;
+              document.getElementById("songnmm").hidden = true;
               document.getElementById("songnm").hidden = false;
             {{/if}}
 
             </script>
-
             <h3 id="songnm" class="songname">{{title}}</h3>
             <h3 id="songnmm" class="songnamemobile">Currently Playing: <br>{{title}}</h3>
-
-
-
       </div>
       {{/with}}
-
-    
-
     <div class="historyQueue" id="history">
       {{#each getRecent}}
         <img src="{{thumbnail}}" class="historyQ">
@@ -143,7 +126,7 @@
 <template name="sourceSelect">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <select id="src" class="dropdown" style="margin-top: 15px;">
-    <option value="youtube">Source: YouTube</option>
+    <option value="youtube">YouTube</option>
     <option value="soundcloud">SoundCloud</option>
   </select>
 </template>
@@ -158,7 +141,7 @@
 
 <template name="searchBox">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <input type="text" class="search" id="search-box" placeholder="search youtube here">
+  <input type="text" class="search" id="search-box" placeholder="search YouTube here">
   <div class="list-group" hidden = "true;">
   {{#each getSearchResults}}
       <a href="#" class="list-group-item">
