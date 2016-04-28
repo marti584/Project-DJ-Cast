@@ -1,10 +1,13 @@
 var recommendList = [];
 var recommendationList = [];
+var is_mobile = false;
 
 Template.channel.onCreated(function() {
   var self = this;
   self.autorun(function() {
     var channelId = FlowRouter.getParam('id');
+    is_mobile = !!navigator.userAgent.match(/iphone|android|blackberry/ig) || false;
+    console.log(is_mobile);
 
     self.subscribe('oneChannel', channelId);
     self.subscribe('songList', channelId);
@@ -59,6 +62,9 @@ Template.channel.helpers({
 
   recommendations: function() {
     return recommendationList.toString();
+  },
+  isMobile: function() {
+    return is_mobile;
   }
   
 
@@ -202,6 +208,9 @@ Template.Moderator.helpers({
   },
   isYoutube: function(source) {
     return source == 'youtube';
+  },
+  isMobile: function() {
+    return is_mobile;
   }
 });
 

@@ -8,7 +8,9 @@ img.playerimg {
     object-fit: cover;
 }
 
-
+@-ms-viewport{
+    width: device-width;
+}
 
 img.historyQ {
     width: 200px;
@@ -143,7 +145,7 @@ h3.songname{
 	padding-bottom:5px;
 	margin-top:5px;
 	color: #E4E4E4;
-    text-align: left;
+    text-align: center;
     margin-left: 55px;
     margin-right: 60px;
 }
