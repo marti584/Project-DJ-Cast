@@ -35,7 +35,9 @@
         </div>
 
          <div class="headright">
-          {{> searchBox}}{{> suggestionModal}}{{> prepopulate}}<br>
+          {{> searchBox}}{{> suggestionModal}}{{#if isModerator}}
+            {{> prepopulate }}
+          {{/if}}<br>
 
           {{> sourceSelect}}
 
