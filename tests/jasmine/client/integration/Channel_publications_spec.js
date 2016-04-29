@@ -32,7 +32,7 @@ describe('Channel publications', function() {
   it('publishes the latest channels', function(done) {
     var sub = Meteor.subscribe('latestChannels', {
       onReady() {
-        expect(Channel.getLatest().count()).toBe(10);
+        expect(Channel.getLatest(20).count()).toBe(10);
         sub.stop();
       },
       onStop(err) {
@@ -44,7 +44,7 @@ describe('Channel publications', function() {
     });
   });
 
-  it('stops when trying to subscribe to my subscriptions while logged out', function(done) {
+  it('stops when trying to create a room while logged out', function(done) {
     var sub = Meteor.subscribe('myChannels', {
       onReady() {
         fail('should stop');
@@ -58,34 +58,34 @@ describe('Channel publications', function() {
     });
   });
 
-  it('should publish my subscribed channels', function(done) {
+  // it('should publish my channels', function(done) {
 
-    // Login
-    Meteor.loginWithPassword('Phony', 'password', function() {
+  //   // Login
+  //   Meteor.loginWithPassword('Phony', 'password', function() {
       
-      // Subscribe the user to some channels
-      Meteor.call('/users/subscribe', channels[0], function() {
-        Meteor.call('/users/subscribe', channels[1], function() {
-          Meteor.call('/users/subscribe', channels[2], function() {
+  //     // Subscribe the user to some channels
+  //     Meteor.call('/users/subscribe', channels[0], function() {
+  //       Meteor.call('/users/subscribe', channels[1], function() {
+  //         Meteor.call('/users/subscribe', channels[2], function() {
 
-            // Subscribe to the publication
-            var sub = Meteor.subscribe('myChannels', {
-              onReady() {
-                expect(User.me().getSubscriptions().count()).toBe(3);
-                sub.stop();
-                done();
-              },
-              onStop(err) {
-                if(err) {
-                  fail(err);
-                  done();
-                }
-              }
-            });
-          });
-        });
-      });
+  //           // Subscribe to the publication
+  //           var sub = Meteor.subscribe('myChannels', {
+  //             onReady() {
+  //               expect(User.me().getSubscriptions().count()).toBe(3);
+  //               sub.stop();
+  //               done();
+  //             },
+  //             onStop(err) {
+  //               if(err) {
+  //                 fail(err);
+  //                 done();
+  //               }
+  //             }
+  //           });
+  //         });
+  //       });
+  //     });
 
-    });
-  });
+  //   });
+  // });
 });
