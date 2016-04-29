@@ -365,94 +365,6 @@ Template.Moderator.events({
             }
           }
       } );
-
-			Meteor.subscribe('history', channelId);
-			var i;
-			var size = History.getLatest(channelId).fetch().length;
-			var lastPlayed = History.getLatest(channelId).fetch();
-
-			//Clean the Video Title to get the Artist only
-			var myUrl = 'http://developer.echonest.com/api/v4/artist/extract';
-
-			var cleanedArtists = [];
-			for(i = 0; i < size; i++){
-				var args = {
-									format: 'json',
-									api_key: 'DHTQGX3WXZI7YKQSF',
-									text: lastPlayed[i].title,
-									min_familiarity: '0.5',
-									results: 1,
-				};
-
-				$.ajax({
-					type: 'GET',
-					url: myUrl,
-					data: args,
-					dataType: 'json',
-					success: function(data){
-						cleanedArtists[i] = data.response.artists[0].name;
-					},
-					async: false
-				});
-			}
-			myUrl = 'http://developer.echonest.com/api/v4/artist/similar';
-			var args = {
-						format: 'json',
-						api_key: 'DHTQGX3WXZI7YKQSF',
-						name: cleanedArtists,
-						min_familiarity: '.8',
-						results: 10,
-			}
-
-			var similarIDS = [];
-			var similarArtists = [];
-			$.ajax({
-				type: 'GET',
-				url: myUrl,
-				data: args,
-				dataType: 'json',
-				traditional: true,
-				success: function(data) {
-					var j = 0;
-					$.each(data.response.artists, function (key, val){
-						similarArtists[j] = val.name;
-						similarIDS[j] = val.id;
-						j++;
-					});
-				},
-				async: false
-			});
-			//Get the hottest song for each similar artist
-			myUrl = 'http://developer.echonest.com/api/v4/song/search';
-			var k;
-			var recommendations = [];
-			for(k = 0; k < similarArtists.length; k++){
-				recommendations[k] = "";
-			}
-			for(k = 0; k < similarIDS.length; k++){
-				var args = {
-									format: 'json',
-									api_key: 'DHTQGX3WXZI7YKQSF',
-									artist_id: similarIDS[k],
-									sort: 'song_hotttnesss-desc',
-									results: 1,
-				}
-				$.ajax({
-					type: 'GET',
-					url: myUrl,
-					data: args,
-					dataType: 'json',
-					success: function(data){
-						recommendations[k] = recommendations[k].concat(similarArtists[k]);
-						recommendations[k] = recommendations[k].concat(" - ");
-						recommendations[k] = recommendations[k].concat(data.response.songs[0].title);
-					},
-					async: false
-				});
-			}
-			for(k = 0; k < recommendations.length; k++){
-        recommendList[k] = recommendations[k];
-			}
     }
   },
 
@@ -476,6 +388,96 @@ Template.suggestionModal.onCreated(function() {
 Template.suggestionModal.events({
   "click #largeCreate": function(e, template) {
     document.getElementById('rec-modal').hidden = false;
+
+    var channelId = FlowRouter.getParam('id');
+    Meteor.subscribe('history', channelId);
+      var i;
+      var size = History.getLatest(channelId).fetch().length;
+      var lastPlayed = History.getLatest(channelId).fetch();
+
+      //Clean the Video Title to get the Artist only
+      var myUrl = 'http://developer.echonest.com/api/v4/artist/extract';
+
+      var cleanedArtists = [];
+      for(i = 0; i < size; i++){
+        var args = {
+                  format: 'json',
+                  api_key: 'DHTQGX3WXZI7YKQSF',
+                  text: lastPlayed[i].title,
+                  min_familiarity: '0.5',
+                  results: 1,
+        };
+
+        $.ajax({
+          type: 'GET',
+          url: myUrl,
+          data: args,
+          dataType: 'json',
+          success: function(data){
+            cleanedArtists[i] = data.response.artists[0].name;
+          },
+          async: false
+        });
+      }
+      myUrl = 'http://developer.echonest.com/api/v4/artist/similar';
+      var args = {
+            format: 'json',
+            api_key: 'DHTQGX3WXZI7YKQSF',
+            name: cleanedArtists,
+            min_familiarity: '.8',
+            results: 5,
+      }
+
+      var similarIDS = [];
+      var similarArtists = [];
+      $.ajax({
+        type: 'GET',
+        url: myUrl,
+        data: args,
+        dataType: 'json',
+        traditional: true,
+        success: function(data) {
+          var j = 0;
+          $.each(data.response.artists, function (key, val){
+            similarArtists[j] = val.name;
+            similarIDS[j] = val.id;
+            j++;
+          });
+        },
+        async: false
+      });
+      //Get the hottest song for each similar artist
+      myUrl = 'http://developer.echonest.com/api/v4/song/search';
+      var k;
+      var recommendations = [];
+      for(k = 0; k < similarArtists.length; k++){
+        recommendations[k] = "";
+      }
+      for(k = 0; k < similarIDS.length; k++){
+        var args = {
+                  format: 'json',
+                  api_key: 'DHTQGX3WXZI7YKQSF',
+                  artist_id: similarIDS[k],
+                  sort: 'song_hotttnesss-desc',
+                  results: 1,
+        }
+        $.ajax({
+          type: 'GET',
+          url: myUrl,
+          data: args,
+          dataType: 'json',
+          success: function(data){
+            recommendations[k] = recommendations[k].concat(similarArtists[k]);
+            recommendations[k] = recommendations[k].concat(" - ");
+            recommendations[k] = recommendations[k].concat(data.response.songs[0].title);
+          },
+          async: false
+        });
+      }
+      for(k = 0; k < recommendations.length; k++){
+        recommendList[k] = recommendations[k];
+      }
+
     template.urls.set([]);
     self.urls = new ReactiveVar([]);
 		var allItems = [];
