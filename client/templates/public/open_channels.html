@@ -1,16 +1,18 @@
 <template name="openchannels">
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <div>
   <ul class="openchannellist">
     
     {{#each channels}}
     <li class="openchannel"> 
       <button type="button" class="btn btn-default" style="float:right;">X</button>
-      <div class="center">
-        <h7 class="channeltitle">{{title}}</h7>
-        <br>
-        <h8 class="channeldesc">{{query}}</h8>
-      </div>
+      <h7 class="channeltitle">{{title}}</h7>
+      <br>
+      <h8 class="channeldesc">Channel Description: <br> {{query}}</h8>
+      <br>
+      
     </li>
     {{/each}}
     

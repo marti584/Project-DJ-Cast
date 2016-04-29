@@ -1,4 +1,7 @@
+
 <template name="channel">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
     {{#with channel}}
     <div class=playerbody>
  
@@ -8,8 +11,16 @@
 
 
 
-<a href="https://twitter.com/share" class="twitter-share-button" data-text="I am listening to {{title}} on #djcast_" data-via="djcast_"></a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+<a id="twidget" href="https://twitter.com/share" class="twitter-share-button" data-text="I am listening to {{title}} on #djcast_" data-via="djcast_"></a>
+<script>
+{{#if isMobile}}
+
+            {{else}}
+            !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+            {{/if}}
+
+
+</script>
               
           {{#if isModerator}}
             {{> qrCode }}
@@ -17,7 +28,7 @@
 
           </h1>
           <h4 class="roomdesc">{{query}}</h4>
-          <div class="upnext">
+          <div class="upnext" id="next">
             {{#with nextS}}
               <h3 class="upnextsongname">Up next.. {{title}}</h3>
               <img src="{{thumbnail}}" class="historyQ">
@@ -26,7 +37,9 @@
         </div>
 
          <div class="headright">
-          {{> searchBox}}{{> suggestionModal}}{{> prepopulate}}<br>
+          {{> searchBox}}{{> suggestionModal}}{{#if isModerator}}
+            {{> prepopulate }}
+          {{/if}}<br>
 
           {{> sourceSelect}}
 
@@ -34,42 +47,73 @@
       </section>
 
       {{#with currentSong}}
-        <div class="player">
+        <div class="player" id="playerbod">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
           {{#if isModerator}}
             {{> Moderator videoId=videoID source=source thumbnail=thumbnail}}
           {{else}}
             <img src="{{thumbnail}}" class="playerimg">
-          {{/if}}
-          <div class="playermeta">
-            <h3 class="songname">{{title}}</h3>
-          </div>
-        </div>
-      {{/with}}
+            <script type="text/javascript">
+            {{#if isMobile}}
+              document.getElementById("next").hidden = true;
+              document.getElementById("history").hidden = true;
+              document.getElementById("playerbod").hidden = true;
+              document.getElementById("upcoming").hidden = true;
+              document.getElementById("largeCreate").hidden = true;
+              document.getElementById("twidget").hidden = true;
+              document.getElementById("populate-button").hidden = true;              
+            {{else}}
+            {{/if}}
 
-    <div class="historyQueue">
+            </script>
+          {{/if}}
+        </div>
+      <div class="playermeta">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <script type="text/javascript">
+            {{#if isMobile}}
+              document.getElementById("songnmm").hidden = false;
+              document.getElementById("songnm").hidden = true;  
+            {{else}}
+              document.getElementById("songnmm").hidden = true;
+              document.getElementById("songnm").hidden = false;
+            {{/if}}
+
+            </script>
+            <h3 id="songnm" class="songname">{{title}}</h3>
+            <h3 id="songnmm" class="songnamemobile">Currently Playing: <br>{{title}}</h3>
+      </div>
+      {{/with}}
+    <div class="historyQueue" id="history">
       {{#each getRecent}}
         <img src="{{thumbnail}}" class="historyQ">
       {{/each}}
     </div>
 
-  <div class="queue-group">
+    <div class="up" id="upcoming">
+            <h3 class="queue-head">Upcoming Songs</h3>
+    </div>
+
+
+  <div class="queue-group" id="upcoming-songs">
     {{#if getQueue}}
-      <h3 class="queue-head">Upcoming Songs</h3>
+      <!--<h3 class="queue-head">Upcoming Songs</h3>-->
       {{#each getQueue}}
         <a href="#" class="queue-group-item">
         <div class="row" style="margin-bottom: 10px;">
           <div class="col-md-7">
-            <h4 class="queue-group-item-heading">{{votes}} {{title}}</h4>
+            <h4 class="queue-group-item-heading" style="margin-left: -40px;">[ {{votes}} ] {{title}}</h4>
           </div>
           <div class="col-md-5">
             <span>
               {{#if isModerator}}
-                <input id="removeNow" type="button" value="Remove" style="width: 50px;"/>
+                <input id="removeNow" type="button" value="X" style="width: 50px;"/>
               {{/if}}
-              <input id="downvoteButton" type="button" value="Downvote" style="width: 100px;"/>
-              <input id="upvoteButton" type="button" value="Upvote" style="width: 100px;"/>
+              <input id="upvoteButton" type="button" value="/\" style="width: 50px;"/>
+              <input id="downvoteButton" type="button" value="\/" style="width: 50px;"/>
               {{#if isModerator}}
-                <input id="playNow" type="button" value="Play" style="width: 50px;"/>
+                <input id="playNow" type="button" value="PLAY" style="width: 50px;"/>
               {{/if}}
             </span>
           </div>
@@ -85,13 +129,15 @@
 </template>
 
 <template name="sourceSelect">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
   <select id="src" class="dropdown" style="margin-top: 15px;">
-    <option value="youtube">Source: YouTube</option>
+    <option value="youtube">YouTube</option>
     <option value="soundcloud">SoundCloud</option>
   </select>
 </template>
 
 <template name="qrCode">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
   <button type="button" class="socialbutton">QR Code</button>
     <div class="showQr" hidden = "true;">
       {{> QrCode text=getCurrentUrl }}
@@ -99,8 +145,18 @@
 </template>
 
 <template name="searchBox">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <input type="text" class="search" id="search-box" placeholder="search youtube here">
-  <div class="list-group" hidden = "true;">
+  <div id="searchlist" class="list-group" hidden = "true;">
+  <script>
+   $('#search-box').keyup(function(e) {
+     
+      $('#searchlist').show();
+     
+   });
+  </script>
   {{#each getSearchResults}}
       <a href="#" class="list-group-item">
       <div class="row">
@@ -121,37 +177,49 @@
       </div>
         </a>
     {{/each}}
+
     </div>
+
+  <script>
+  $(document).click(function(e) {
+  if(e.target.id!="searchlist"){  // if click is not in 'mydiv'
+    $('#searchlist').hide(10);
+  } 
+});
+</script>
+
 </template>
 
 <template name="prepopulate">
-	<button type="button" id="populate-button" class="populateButton">Prepopulate Queue</button>
+	<button type="button" id="populate-button" class="suggestionButton">Populate Queue</button>
 </template>
 
 <template name="suggestionModal">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <button type="button" id="largeCreate" class="suggestionButton" data-toggle="modal" data-target="#myModal2">Song Suggestions</button>
 <!-- Modal -->
 <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
-    <div class="modal-content">
+    <div class="modal-content" id='rec-modal'>
       <div class="modal-header">
-        
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Suggested Songs
-
-        </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="false">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Suggested Songs</h4>
       </div>
       <div class="modal-body" id="modal">        
-        <label for="recommendations" id="reco">No suggestions yet..</label>
-        <br>
-        <label for="recommendations" id="reco2"></label>
-        <br>
-        <label for="recommendations" id="reco3"></label>
-        <br>
-        <label for="recommendations" id="reco4"></label>
-        <br>
-        <label for="recommendations" id="reco5"></label>
-        <br>        
+       	<div class="rec-list-group">
+  			{{#each getRecSearchResults}}
+      		<a href="#" class="rec-list-group-item" data-dismiss="modal" data-backdrop="false">
+		      <div class="row">
+  		      <div class="col-md-1">
+    		      <img src="{{snippet.thumbnails.default.url}}" class="img-responsive"/>
+        		</div>
+        		<div class="col-md-11">
+          		<h3 class="rec-list-group-item-heading">{{snippet.title}}</h3>
+        		</div>
+      		</div>
+        	</a>
+    		{{/each}}
+    		</div>
       </div>
       <div class="modal-footer">
       </div>
@@ -162,7 +230,10 @@
 </template>
 
 <template name="Moderator">
+
   <div id="player"></div>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   {{#unless isYoutube source}}<img src="{{thumbnail}}" class="playerimg" style="width: 480px; height: 480px;">{{/unless}}
   <br>
   <span>
@@ -322,10 +393,29 @@
     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
   
     var player;
+    var height;
+    var width;
+    var psize;
+    {{#if isMobile}} 
+      height = '270';
+      width = '480';
+      document.getElementById("next").hidden = true;
+      document.getElementById("largeCreate").hidden = true;
+      document.getElementById("history").hidden = true;
+      document.getElementById("playerbod").hidden = true;
+      document.getElementById("upcoming").hidden = true;
+      document.getElementById("twidget").hidden = true;
+      document.getElementById("populate-button").hidden = true;
+      
+    {{else}}
+      height = '270';
+      width = '480';
+    {{/if}}
+
     function onYouTubeIframeAPIReady() {
       player = new YT.Player('player', {
-        height: '270',
-        width: '480',
+        height: height,
+        width: width,
         videoId: '{{videoId}}',
         playerVars: {
           'autoplay': 1,
@@ -348,6 +438,19 @@
   </script>
   {{else}}
   <script type="text/javascript">
+      {{#if isMobile}} 
+        document.getElementById("next").hidden = true;
+      document.getElementById("largeCreate").hidden = true;
+        document.getElementById("history").hidden = true;
+        document.getElementById("playerbod").hidden = true;
+        document.getElementById("upcoming").hidden = true;
+        document.getElementById("twidget").hidden = true;
+        document.getElementById("populate-button").hidden = true;
+
+      
+      {{else}}
+        
+      {{/if}}
       document.getElementById("player").hidden = true;
       var tag = document.createElement('script');
       tag.src = "https://connect.soundcloud.com/sdk/sdk-3.0.0.js";
