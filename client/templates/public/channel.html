@@ -1,4 +1,6 @@
+
 <template name="channel">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {{#with channel}}
     <div class=playerbody>
@@ -158,9 +160,17 @@
 </template>
 
 <template name="searchBox">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <input type="text" class="search" id="search-box" placeholder="search youtube here">
-  <div class="list-group" hidden = "true;">
+  <div id="searchlist" class="list-group" hidden = "true;">
+  <script>
+   $('#search-box').keyup(function(e) {
+     
+      $('#searchlist').show();
+     
+   });
+  </script>
   {{#each getSearchResults}}
       <a href="#" class="list-group-item">
       <div class="row">
@@ -181,7 +191,17 @@
       </div>
         </a>
     {{/each}}
+
     </div>
+
+  <script>
+  $(document).click(function(e) {
+  if(e.target.id!="searchlist"){  // if click is not in 'mydiv'
+    $('#searchlist').hide(10);
+  } 
+});
+</script>
+
 </template>
 
 <template name="prepopulate">
