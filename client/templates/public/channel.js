@@ -185,7 +185,7 @@ Template.suggestionModal.helpers({
 Template.prepopulate.events({
 	"click #populate-button": function (e, template) {
 		//Get top pop artist
-		var myUrl = 'http://developer.echonest.com/api/v4/genre/artists';
+		var myUrl = 'https://developer.echonest.com/api/v4/genre/artists';
 
 		var artists = [];
 		var artistID = [];
@@ -212,7 +212,7 @@ Template.prepopulate.events({
 		});
 
 
-			myUrl = 'http://developer.echonest.com/api/v4/song/search';
+			myUrl = 'https://developer.echonest.com/api/v4/song/search';
 			var k;
 			var songpop = [];
 			for(k = 0; k < artists.length; k++){
@@ -377,7 +377,7 @@ Template.Moderator.events({
 
 
 			//Clean the Video Title to get the Artist only
-			var myUrl = 'http://developer.echonest.com/api/v4/artist/extract';
+			var myUrl = 'https://developer.echonest.com/api/v4/artist/extract';
 
 			var cleanedArtists = [];
 			for(i = 0; i < size; i++){
@@ -412,7 +412,7 @@ Template.Moderator.events({
 				//console.log("Artists: " + JSON.stringify(cleanedArtists[i]));
 			//}
 			//Suggest similar artists
-			myUrl = 'http://developer.echonest.com/api/v4/artist/similar';
+			myUrl = 'https://developer.echonest.com/api/v4/artist/similar';
 			var args = {
 						format: 'json',
 						api_key: 'DHTQGX3WXZI7YKQSF',
@@ -445,7 +445,7 @@ Template.Moderator.events({
 			//}
 
 			//Get the hottest song for each similar artist
-			myUrl = 'http://developer.echonest.com/api/v4/song/search';
+			myUrl = 'https://developer.echonest.com/api/v4/song/search';
 			var k;
 			var recommendations = [];
 			for(k = 0; k < similarArtists.length; k++){
