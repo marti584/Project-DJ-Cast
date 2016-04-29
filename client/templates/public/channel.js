@@ -7,7 +7,7 @@ Template.channel.onCreated(function() {
   self.autorun(function() {
     var channelId = FlowRouter.getParam('id');
     is_mobile = !!navigator.userAgent.match(/iphone|android|blackberry/ig) || false;
-    console.log(is_mobile);
+    
 
     self.subscribe('oneChannel', channelId);
     self.subscribe('songList', channelId);
